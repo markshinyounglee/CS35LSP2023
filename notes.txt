@@ -1,1 +1,5 @@
 This is our notes file.
+
+We shall briefly note errors and fixes here.
+
+
