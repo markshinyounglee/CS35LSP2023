@@ -24,5 +24,4 @@ const beefSchema = new Schema({
     }
 }, {timestamps: true})
 
-
 module.exports = mongoose.model('Beef', beefSchema)

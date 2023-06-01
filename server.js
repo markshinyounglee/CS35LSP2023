@@ -4,13 +4,12 @@ const _ = require('lodash')
 const express = require('express');
 require('dotenv').config()
 const beefRoutes = require('./routes/beef')
+const userRoutes = require('./routes/user')
 const app = express();
 const port = 4000
 const mongoose = require('mongoose')
-
-
-
-
+const controller1 = require('./backend/controllers/beefController');
+const controller2 = require('./backend/controllers/userController');
 
 //middleware 
 app.use(express.json())
@@ -21,7 +20,14 @@ app.use( (req,res, next ) => {
 })
 
 //routes
-app.use('/api/beef',beefRoutes)
+// app.use('/api/beef', beefRoutes)
+// app.use('/api/user', userRoutes)
+app.use('/api/beef', controller1.createBeef);
+app.use('/api/beef', controller1.getBeef);
+app.use('/api/beef', controller1.getBeefs);
+
+app.use('/api/user', controller2.createUser);
+app.use('/api/user', controller2.getUsers);
 
 //connect to DB
 mongoose.connect(process.env.MONG_URI)
