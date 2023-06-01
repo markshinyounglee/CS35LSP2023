@@ -1,40 +1,22 @@
 
 const express = require('express')
-const Beef = require('../backend/models/beefModel')
+const {
+  createBeef, 
+  getBeef,
+  getBeefs
+} = require('../backend/controllers/beefController')
+// const Beef = require('../backend/models/beefModel')
 const router = express.Router()
 const mongoose = require('mongoose')
 
 //Get all Beefs
-router.get('/', (req, res) => {
-    res.json({mssg: 'GET all beefs'})
-})
+router.get('/', getBeefs)
 
 //GET a single beef
-router.get('/:id', (req, res) => {
-    res.json({mssg: 'GET a single beef'})
-})
+router.get('/:id', getBeef)
 
 //POST a new beef
-router.post('/', async (req, res) => {
-  const { title, id, description, votesForUser1, votesForUser2 } = req.body;
-
-  try {
-    if (mongoose.connection.readyState !== 1) {
-      throw new Error('MongoDB connection is not ready');
-    }
-
-    const beef = await Beef.create({
-      title,
-      id,
-      description,
-      votesForUser1,
-      votesForUser2,
-    });
-    res.status(200).json(beef);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+router.post('/', createBeef)
 
 //DELETE a beef
 router.delete('/:id', (req, res) => {

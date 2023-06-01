@@ -7,11 +7,6 @@ const beefSchema = new Schema({
         type: String,
         required: true
     },
-    id: {
-        //beef's id
-        type: Number,
-        required: true
-    },
     description: {
         //beef's description
         type: String,
@@ -28,5 +23,6 @@ const beefSchema = new Schema({
         required: true
     }
 }, {timestamps: true})
+
 
 module.exports = mongoose.model('Beef', beefSchema)
