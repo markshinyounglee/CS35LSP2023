@@ -21,6 +21,7 @@ const getBeef = async (req, res) => {
 }
 
 // create new beef
+// TO-DO : UPDATE EACH USER'S MYBEEFS
 const createBeef = async (req, res) => {
 const { title, description, votesForUser1, votesForUser2, user1, user2 } = req.body;
 //add doc to database
@@ -44,7 +45,7 @@ try {
 
 // delete a beef
 
-//DOUBLE CHECK THIS SO THAT IT DOESN'T DELETE ALL OF THE BEEFS IN ANY ONE USER
+//TO-DO : DOUBLE CHECK THIS SO THAT IT DOESN'T DELETE ALL OF THE BEEFS IN ANY ONE USER
 const deleteBeef = async (req, res) => {
   const {id} = req.params
 

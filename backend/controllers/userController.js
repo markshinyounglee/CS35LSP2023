@@ -32,7 +32,8 @@ const createUser = async (req, res) => {
         friendlist,
         blocklist,
         mybeefs,
-        requests
+        s_requests,
+        r_requests
       });
       res.status(200).json(user);
     } catch (error) {
@@ -56,7 +57,7 @@ const changeUserPswd = async (req, res) => {
 
   res.status(200).json(user)
 }
-
+//I think that this should be a sub feature of accepting and sending requests
 const addUserFriend = async (req, res) => {
   const {id} = req.params
 
