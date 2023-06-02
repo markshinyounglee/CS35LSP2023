@@ -39,12 +39,47 @@ try {
   res.status(400).json({ error: error.message });
 }}
 // delete a beef
+const deleteBeef = async (req, res) => {
+  const {id} = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such beef'})
+  }
+
+  const beef = await Beef.findOneAndDelete({_id: id})
+
+  if (!beef) {
+    return res.status(404).json({error: 'No such beef'})
+  }
+
+  res.status(200).json(beef)
+}
 
 //update a beef 
+
+const updateBeef = async (req, res) => {
+  const {id} = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such beef'})
+  }
+
+  const beef = await Beef.findOneAndUpdate({_id: id},{
+    ...req.body
+  })
+
+  if (!beef) {
+    return res.status(404).json({error: 'No such beef'})
+  }
+
+  res.status(200).json(beef)
+}
 
 
 module.exports = {
     createBeef,
     getBeef,
-    getBeefs
+    getBeefs,
+    deleteBeef,
+    updateBeef
 }
