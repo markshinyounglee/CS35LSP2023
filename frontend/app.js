@@ -8,9 +8,11 @@ const data = require('./pages/sample-data.js');
 const port = 4000;
 
 // connect to database
+/*
 mongoose.connect("mongodb+srv://adurrani:keepbeefin@beefreal.sd6skno.mongodb.net/?retryWrites=true&w=majority")
 .then(()=>console.log('connected to database through port', port))
 .catch((err)=>console.log('error', err))
+*/
 
 const app = express();
 
@@ -19,7 +21,7 @@ app.set('view engine', 'ejs');
 app.set('views', 'pages'); // find pages under pages folder
 
 // fetch URL
-app.use(bodyParser.urlencoded({extended:false}));
+// app.use(bodyParser.urlencoded({extended:false}));
 
 try {
     app.listen(port, () => {
@@ -35,6 +37,7 @@ app.get('/', (req, res)=>{
     // HTML page // res.sendFile('./pages/main.html', {root: dirname});
 }); 
 
+/*
 app.use('/', (req, res, next) => {
     const filters = req.query;
     const filteredUsers = data.filter(user => {
@@ -42,6 +45,7 @@ app.use('/', (req, res, next) => {
         
     })
 });
+*/
 
 app.get('/profile-page', (req, res) => {
     res.render('profile-page', {title: 'Profile'});

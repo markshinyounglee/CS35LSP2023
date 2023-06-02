@@ -1,5 +1,8 @@
 <!-- inspired by: https://www.geeksforgeeks.org/search-bar-using-html-css-and-javascript/ -->
 <!-- And this: https://www.geeksforgeeks.org/how-to-implement-search-and-filtering-in-a-rest-api-with-node-js-and-express-js/ -->
+
+<!-- HELPFUL: https://dev.to/am20dipi/how-to-build-a-simple-search-bar-in-javascript-4onf -->
+<!-- https://stackoverflow.com/questions/38946748/how-to-use-post-get-for-making-search-box-in-nodejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,9 +16,11 @@
     <% }); %> 
     
     <script>
-        let data = <%= JSON.stringify(data)%>; 
+        // let data = <%= JSON.stringify(data)%>; 
         function searchbyname() {
             console.log("function called");
+            // console.log(item);
+            /*
             let input = document.getElementById('searchbar').value.toLowerCase();
             try {
                 let namelist = data.map(item => item.name); 
@@ -37,15 +42,23 @@
             {
                 console.log(error);
             }
+            */
         }
-
+    
     
     </script>
     
 
     <br>Search for Friends:
-    <input id="searchbar" size="50" onkeyup="searchbyname()" type="text" name="search" placeholder="Search friends" />
-
+    <!-- onkeyup doesn't work: <input id="searchbar" size="50" onkeyup="searchbyname()" class='input', type="text" name="search" placeholder="Search friends" /> -->
+    <input id="searchbar" size="50" class='input', type="text" name="search" placeholder="Search friends" />
+<script>
+    const searchInput = document.querySelector('.input')
+    searchInput.addEventListener("input", () => {
+    // 1. write a function that removes any previous results from the page
+    searchbyname()
+})
+</script>
     <nav>
         <ul>
              <a href="/profile-page">My Profile</a>
