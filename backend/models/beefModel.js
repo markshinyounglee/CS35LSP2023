@@ -17,11 +17,20 @@ const beefSchema = new Schema({
         type: Number,
         required: true
     },
+    user1: {
+        type: String,
+        required: true
+    },
+    user2: {
+        type: String,
+        required: true
+    },
     votesForUser2: {
         //beef's votes for user 2
         type: Number,
         required: true
     }
+
 }, {timestamps: true})
 
 module.exports = mongoose.model('Beef', beefSchema)
