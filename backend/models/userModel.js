@@ -22,12 +22,19 @@ const userSchema = new Schema( {
             type : String
         }
     },
+    //mybeefs refers to the beefs that this particular user owns
     mybeefs : {
         type : Array, 
         items : {
             type : String
         }
     },
+    requests : {
+        type: Array,
+        items : {
+            type : String
+        }
+    }
 }, {timestamps: true})
 
 module.exports = mongoose.model('User', userSchema)
