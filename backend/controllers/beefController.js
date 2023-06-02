@@ -21,7 +21,7 @@ const getBeef = async (req, res) => {
 
 // create new beef
 const createBeef = async (req, res) => {
-const { title, description, votesForUser1, votesForUser2 } = req.body;
+const { title, description, votesForUser1, votesForUser2, user1, user2 } = req.body;
 //add doc to database
 try {
   if (mongoose.connection.readyState !== 1) {

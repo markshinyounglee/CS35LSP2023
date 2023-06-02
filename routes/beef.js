@@ -21,6 +21,8 @@ router.post('/', createBeef)
 
 //DELETE a beef
 router.delete('/:id', deleteBeef)
+
 //UPDATE a beef
 router.patch('/:id', updateBeef)
+
 module.exports = router
