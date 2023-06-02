@@ -17,13 +17,15 @@
   },
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "concurrently": "^8.0.1",
     "dotenv": "^16.1.3",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "lodash": "^4.17.21",
     "mongodb": "^5.5.0",
-    "mongoose": "^7.2.2"
+    "mongoose": "^7.2.2",
+    "puppeteer": "^20.5.0"
   },
   "repository": "https://github.com/markshinyounglee/CS35LSP2023.git"
 }

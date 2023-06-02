@@ -2,6 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const _ = require('lodash')
 const express = require('express');
+const puppeteer = require('puppeteer');
 require('dotenv').config()
 const beefRoutes = require('./routes/beef')
 const userRoutes = require('./routes/user')
