@@ -43,6 +43,8 @@ try {
 }}
 
 // delete a beef
+
+//DOUBLE CHECK THIS SO THAT IT DOESN'T DELETE ALL OF THE BEEFS IN ANY ONE USER
 const deleteBeef = async (req, res) => {
   const {id} = req.params
 

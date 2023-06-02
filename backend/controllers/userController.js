@@ -17,6 +17,7 @@ const getUser = async(req, res) =>{
     res.status(200).json(user)
 }
 
+
 const createUser = async (req, res) => {
     const { usrname, pswd, friendlist, blocklist, mybeefs, requests } = req.body;
     //add doc to database
@@ -56,9 +57,30 @@ const changeUserPswd = async (req, res) => {
   res.status(200).json(user)
 }
 
+const addUserFriend = async (req, res) => {
+  const {id} = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such user'})
+  }
+  
+  const user = await User.findOneAndUpdate({_id: id}, {
+    $push: { friendlist: req.body.friendlist } },
+    {new: true}
+  );
+  
+  if (!user) {
+    return res.status(404).json({error: 'No such user'})
+  }
+
+  res.status(200).json(user)
+}
+
+
 module.exports = {
     getUsers,
     getUser,
     createUser,
-    changeUserPswd
+    changeUserPswd,
+    addUserFriend
 }

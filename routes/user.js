@@ -3,7 +3,8 @@ const {
     createUser,
     getUsers, 
     getUser,
-    changeUserPswd
+    changeUserPswd,
+    addUserFriend
 } = require('../backend/controllers/userController')
 
 const router2 = express.Router()
@@ -21,11 +22,11 @@ router2.get('/:id', getUser)
 router2.post('/', createUser)
 
 //ChangePswd
-router2.patch('/:id', changeUserPswd)
+router2.patch('/:id/changeUserPswd', changeUserPswd)
 
 //Add a friend
     //add all of their beefs to visible beefs
-// router2.patch('/:id' addUserFriend)
+router2.patch('/:id/addUserFriend', addUserFriend)
 
 //Add a block
 // router2.patch('/:id' addUserBlock)
