@@ -29,12 +29,20 @@ const userSchema = new Schema( {
             type : String
         }
     },
-    requests : {
+    s_requests : {
+        type: Array,
+        items : {
+            type : String
+        }
+    },
+    r_requests : {
         type: Array,
         items : {
             type : String
         }
     }
 }, {timestamps: true})
+
+//TO-DO : MAYBE ADD A NOTIFICATIONS ARRAY OF NOTIFICATIONS A USER CAN RECEIVE FOR UPDATES LIKE WHEN A FRIEND IS MADE, A BEEF IS STARTED WITH YOU, ETC...
 
 module.exports = mongoose.model('User', userSchema)
