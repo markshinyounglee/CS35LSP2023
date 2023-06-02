@@ -14,7 +14,7 @@ const userSchema = new Schema( {
         type : Array,
         items : {
             type : String
-        },
+        }
     },
     blocklist : {
         type : Array,
@@ -25,29 +25,9 @@ const userSchema = new Schema( {
     mybeefs : {
         type : Array, 
         items : {
-            beef : {
-                title : {
-                    type : String,
-                    required : true
-                },
-                description: {
-                    type : String,
-                    required : true
-                },
-                votesForUser1: {
-                    //beef's votes for user 1
-                    type: Number,
-                    required: true
-                },
-                votesForUser2: {
-                    //beef's votes for user 2
-                    type: Number,
-                    required: true
-                }
-            }
+            type : String
         }
     },
-
 }, {timestamps: true})
 
 module.exports = mongoose.model('User', userSchema)
