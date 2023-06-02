@@ -5,7 +5,7 @@ const VoteButton = ({ beef, user, count, handleClick }) => {
   const handleVoteClick = async () => {
     try {
       // Send PATCH request to update the vote count on the backend for a specific beef
-      const response = await fetch(`/api/updateVoteCount/${beef._id}`, {
+      const response = await fetch(`/api/beef/${beef._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'

@@ -1,5 +1,6 @@
 const Beef = require('../models/beefModel')
 const mongoose = require('mongoose')
+const User = require('../models/userModel')
 
 //get all beefs
 const getBeefs = async (req, res) => { 
@@ -21,7 +22,7 @@ const getBeef = async (req, res) => {
 
 // create new beef
 const createBeef = async (req, res) => {
-const { title, description, votesForUser1, votesForUser2 } = req.body;
+const { title, description, votesForUser1, votesForUser2, user1, user2 } = req.body;
 //add doc to database
 try {
   if (mongoose.connection.readyState !== 1) {
@@ -32,19 +33,65 @@ try {
     title,
     description,
     votesForUser1,
+    user1,
+    user2,
     votesForUser2,
   });
   res.status(200).json(beef);
 } catch (error) {
   res.status(400).json({ error: error.message });
 }}
+
 // delete a beef
 
+//DOUBLE CHECK THIS SO THAT IT DOESN'T DELETE ALL OF THE BEEFS IN ANY ONE USER
+const deleteBeef = async (req, res) => {
+  const {id} = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such beef'})
+  }
+
+  const beef = await Beef.findOneAndDelete({_id: id})
+  
+  if (!beef) {
+    return res.status(404).json({error: 'No such beef'})
+  }
+  //delete the beefs from all the users containing the beef
+  const users = await User.find({ mybeefs: id })
+  users.forEach(async (user) => {
+    user.mybeefs.pull(id)
+    await user.save()
+  })
+
+  res.status(200).json(beef)
+}
+
 //update a beef 
+
+const updateBeef = async (req, res) => {
+  const {id} = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such beef'})
+  }
+
+  const beef = await Beef.findOneAndUpdate({_id: id},{
+    ...req.body
+  })
+
+  if (!beef) {
+    return res.status(404).json({error: 'No such beef'})
+  }
+
+  res.status(200).json(beef)
+}
 
 
 module.exports = {
     createBeef,
     getBeef,
-    getBeefs
+    getBeefs,
+    deleteBeef,
+    updateBeef
 }

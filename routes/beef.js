@@ -2,7 +2,9 @@ const express = require('express')
 const {
   createBeef, 
   getBeef,
-  getBeefs
+  getBeefs,
+  deleteBeef,
+  updateBeef
 } = require('../backend/controllers/beefController')
 // const Beef = require('../backend/models/beefModel')
 const router = express.Router()
@@ -18,11 +20,9 @@ router.get('/:id', getBeef)
 router.post('/', createBeef)
 
 //DELETE a beef
-router.delete('/:id', (req, res) => {
-    res.json({mssg: 'DELETE a beef'})
-})
+router.delete('/:id', deleteBeef)
+
 //UPDATE a beef
-router.patch('/:id', (req, res) => {
-    res.json({mssg: 'UPDATE a beef'})
-})
+router.patch('/:id', updateBeef)
+
 module.exports = router

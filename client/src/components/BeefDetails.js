@@ -13,8 +13,8 @@ const BeefDetails = ({ beef }) => {
       <h4>{title}</h4>
       <p>{description}</p>
       <div className="vote-buttons">
-        <VoteButton beef={beef} user={user1} count={votesForUser1}  />
-        <VoteButton beef={beef} user={user2} count={votesForUser2}  />
+        <VoteButton beef={beef} user={user1} count={votesForUser1} handleClick={handleClick}  />
+        <VoteButton beef={beef} user={user2} count={votesForUser2} handleClick={handleClick} />
       </div>
       <p>{createdAt}</p>
     </div>
