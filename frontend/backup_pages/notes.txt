@@ -1,0 +1,3 @@
+This folder is created to store static HTML webpages we can use WORST CASE.
+
+We intend not to use this, but if things break down, at least we have something to fall back on.
