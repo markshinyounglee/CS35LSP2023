@@ -32,6 +32,8 @@ try {
     title,
     description,
     votesForUser1,
+    user1,
+    user2,
     votesForUser2,
   });
   res.status(200).json(beef);
