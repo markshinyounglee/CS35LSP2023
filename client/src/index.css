@@ -1,13 +1,68 @@
+@font-face {
+  font-family: 'Jura';
+  src: url('D:/Beefreal/CS35LSP2023/client/src/fonts/Jura/JURA-BOLD.TTF');
+}
+
+.container a {
+  color: #3273af; 
+}
+ 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  height: 100%; 
+  background-color: #003366;
+  font-family: Jura, sans-serif;
+  margin: 20;
+  padding: 20;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
+.beefs {
+  height: 0px;
+}
+
+.beef-details {
+  position: relative;
+  cursor: auto; 
+  background: #BFCCD9;  
+  border: 2px solid #e6e6f0; 
+  border-radius: 15px;
+  -moz-border-radius: 15px; 
+  -webkit-border-radius: 15px; 
+  color: #4C5294; 
+  width: 800px; 
+  padding: 20px; 
+  margin: 50px; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.vote-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+
+.vote-buttons button {
+  background-color: #72b4f3;
+  cursor: pointer; 
+  padding: 10px 20px; 
+  border-radius: 5px;
+  border-color: inherit; 
+  -moz-border-radius: 9px; 
+  -webkit-border-radius: 9px;
+}
+
+.pages {
+  max-width: 1400px;
+  padding: 0px; 
+  margin: 0 auto; 
+}
+
