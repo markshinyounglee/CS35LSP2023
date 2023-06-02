@@ -1,5 +1,6 @@
 const Beef = require('../models/beefModel')
 const mongoose = require('mongoose')
+const User = require('../models/userModel')
 
 //get all beefs
 const getBeefs = async (req, res) => { 
@@ -40,6 +41,7 @@ try {
 } catch (error) {
   res.status(400).json({ error: error.message });
 }}
+
 // delete a beef
 const deleteBeef = async (req, res) => {
   const {id} = req.params
@@ -49,10 +51,16 @@ const deleteBeef = async (req, res) => {
   }
 
   const beef = await Beef.findOneAndDelete({_id: id})
-
+  
   if (!beef) {
     return res.status(404).json({error: 'No such beef'})
   }
+  //delete the beefs from all the users containing the beef
+  const users = await User.find({ mybeefs: id })
+  users.forEach(async (user) => {
+    user.mybeefs.pull(id)
+    await user.save()
+  })
 
   res.status(200).json(beef)
 }
