@@ -20,16 +20,18 @@ app.use( (req,res, next ) => {
 })
 
 //routes
-// app.use('/api/beef', beefRoutes)
-// app.use('/api/user', userRoutes)
-app.use('/api/beef', controller1.createBeef)
-app.use('/api/beef', controller1.getBeef)
-app.use('/api/beef', controller1.getBeefs)
-app.use('/api/beef', controller1.deleteBeef)
-app.use('/api/beef', controller1.updateBeef)
+app.use('/api/beef', beefRoutes)
+app.use('/api/user', userRoutes)
+// app.use('/api/beef', controller1.getBeef)
+// app.use('/api/beef', controller1.deleteBeef)
+// app.use('/api/beef', controller1.createBeef)
+// app.use('/api/beef', controller1.updateBeef)
+// app.use('/api/beef', controller1.getBeefs)
 
-app.use('/api/user', controller2.createUser);
-app.use('/api/user', controller2.getUsers);
+
+
+// app.use('/api/user', controller2.createUser);
+// app.use('/api/user', controller2.getUsers);
 
 //connect to DB
 mongoose.connect(process.env.MONG_URI)
