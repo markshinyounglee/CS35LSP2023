@@ -87,7 +87,9 @@ const addUserBlock = async (req, res) => {
     $addToSet: { blocklist: req.body.blocklist } },
     {new: true}
   );
-  
+  if (user.friendlist.includes(req.body.blocklist)) {
+    user.friendlist.pull(req.body.blocklist);
+  }
   if (!user) {
     return res.status(404).json({error: 'No such user'})
   }
