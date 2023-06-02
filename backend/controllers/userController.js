@@ -63,9 +63,28 @@ const addUserFriend = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'No such user'})
   }
-  
+
   const user = await User.findOneAndUpdate({_id: id}, {
-    $push: { friendlist: req.body.friendlist } },
+    $addToSet: { friendlist: req.body.friendlist } },
+    {new: true}
+  );
+  
+  if (!user) {
+    return res.status(404).json({error: 'No such user'})
+  }
+
+  res.status(200).json(user)
+}
+
+const addUserBlock = async (req, res) => {
+  const {id} = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such user'})
+  }
+
+  const user = await User.findOneAndUpdate({_id: id}, {
+    $addToSet: { blocklist: req.body.blocklist } },
     {new: true}
   );
   
@@ -82,5 +101,6 @@ module.exports = {
     getUser,
     createUser,
     changeUserPswd,
-    addUserFriend
+    addUserFriend,
+    addUserBlock
 }
