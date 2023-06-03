@@ -37,7 +37,7 @@ const getUserByName = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const { usrname, pswd, friendlist, blocklist, mybeefs, requests } = req.body;
+    const { usrname, pswd, friendlist, blocklist, mybeefs, s_requests, r_requests } = req.body;
     //add doc to database
     try {
       if (mongoose.connection.readyState !== 1) {
