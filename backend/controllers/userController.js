@@ -16,7 +16,25 @@ const getUser = async(req, res) =>{
     }
     res.status(200).json(user)
 }
-
+// get user by name
+const getUserByName = async (req, res) => {
+  try {
+    const { usrname } = req.query;
+    const user = await User.findOne({ usrname });
+    
+    if (user) {
+      // User found
+      res.status(200).json(user);
+    } else {
+      // User not found
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    // Handle the error appropriately
+    console.error('Error fetching user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
 const createUser = async (req, res) => {
     const { usrname, pswd, friendlist, blocklist, mybeefs, requests } = req.body;
