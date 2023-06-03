@@ -1,10 +1,19 @@
 import React, { useState } from 'react'
 
 const CreateBeef = () => {
+    const [title, setTitle] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
     }
+
+    let userFound = false;
+      for (const user of users) {
+        if (user.usrname === email) {
+          userFound = true;
+          break;
+        }
+      }
 
     return (
         <div className="start-beef">
