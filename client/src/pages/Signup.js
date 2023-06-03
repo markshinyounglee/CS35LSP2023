@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom'
 
-const Login = (props) => {
+const Signup = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,7 +20,7 @@ const Login = (props) => {
       }
 
       if (userFound) {
-        
+        console.log("user found")
       } else {
         // User not found
         console.log("User not found in the database");
@@ -41,8 +40,8 @@ const Login = (props) => {
 
   return (
     <div className="auth-form-container">
-      <h2>Enter Your Email And Password To Sign In</h2>
-      <form className="login-form" onSubmit={handleSubmit}>
+      <h2>Enter Your Email And Password To Sign Up</h2>
+      <form className="register-form" onSubmit={handleSubmit}>
         <label htmlFor="email">Email</label>
         <input
           value={email}
@@ -63,12 +62,8 @@ const Login = (props) => {
         />
         <button type="submit">Log In</button>
       </form>
-      <Link to="/create-account">
-        <h1>Click here to create an account</h1>
-      </Link>
     </div>
-
   );
 };
 
-export default Login;
+export default Signup;

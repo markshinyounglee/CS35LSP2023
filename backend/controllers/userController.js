@@ -19,7 +19,7 @@ const getUser = async(req, res) =>{
 // get user by name
 const getUserByName = async (req, res) => {
   try {
-    const { usrname } = req.query;
+    const { usrname } = req.params;
     const user = await User.findOne({ usrname });
     
     if (user) {
