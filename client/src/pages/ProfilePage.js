@@ -12,19 +12,32 @@ const ProfilePage = () => {
       try {
         const response = await fetch("/api/user/" + globaluserId); // Replace 'userId' with the actual user ID
         const data = await response.json();
-        setUser(data);
+
+        if (response.ok) {
+          setUser(data)
+
+          const response = await fetch("/api/user/" + globaluserId + "/")
+        } else {
+          console.error('Error:', data)
+        }
+        
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
 
     fetchUser();
+
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
 
   return (
     <div>
       {user ? (
-        <div>
+        <div className='user-info'>
           <h1>Username: {user.usrname}</h1>
           <h2>Friend List:</h2>
           <ul>
@@ -44,6 +57,8 @@ const ProfilePage = () => {
               <li key={beef}>{beef}</li>
             ))}
           </ul>
+          <button type="submit">Create Beef</button>
+
         </div>
       ) : (
         <p>Loading user data...</p>
