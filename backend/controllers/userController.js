@@ -1,12 +1,25 @@
 const User = require('../models/userModel.js')
 const mongoose = require('mongoose')
 
+
+
+//get all beefs of a user by their id
+const getAllBeefsOfUser = async(req, res) => {
+  const{id} = req.params
+  const user = await User.findById(id)
+  if (!user) {
+    return res.status(404).json({error: 'No such user'})
+  }
+  res.status(200).json(user.mybeefs)
+}
+
 //get all users
 const getUsers = async(req, res) =>{
     const users = await User.find({}).sort({createdAt: -1})
 
     res.status(200).json(users)
 }
+// get user by ID
 const getUser = async(req, res) =>{
   const {id} = req.params
     const user = await User.findById(id)
@@ -124,5 +137,6 @@ module.exports = {
     changeUserPswd,
     addUserFriend,
     addUserBlock,
-    getUserByName
+    getUserByName,
+    getAllBeefsOfUser
 }
