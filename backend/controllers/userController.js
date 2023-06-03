@@ -123,5 +123,6 @@ module.exports = {
     createUser,
     changeUserPswd,
     addUserFriend,
-    addUserBlock
+    addUserBlock,
+    getUserByName
 }

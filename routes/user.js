@@ -5,7 +5,8 @@ const {
     getUser,
     changeUserPswd,
     addUserFriend,
-    addUserBlock
+    addUserBlock,
+    getUserByName
 } = require('../backend/controllers/userController')
 
 const router2 = express.Router()
@@ -17,6 +18,8 @@ router2.get('/', getUsers)
 //Get a User (based on MongoDB id)
 router2.get('/:id', getUser)
 
+//get a user by name
+router2.get('/:usrname', getUserByName)
 
 //Create a new User
     //To-do : make it so that two users cannot have the same username
