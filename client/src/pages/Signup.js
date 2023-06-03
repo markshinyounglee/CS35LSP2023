@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+let globaluserId = '' 
+
 const Signup = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -8,31 +10,35 @@ const Signup = (props) => {
     e.preventDefault();
 
     const authorize = async () => {
-      const response = await fetch("/api/user/");
-      const users = await response.json();
+    try {
+        const newUser = {
+            usrname: email,
+            pswd: password,
+            friendlist: [],
+            blocklist: [],
+            mybeefs: [],
+            s_requests: [],
+            r_requests: [],
+        };
 
-      let userFound = false;
-      for (const user of users) {
-        if (user.usrname === email) {
-          userFound = true;
-          break;
+        const createUserResponse = await fetch("/api/user/", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newUser),
+        });
+
+        if (createUserResponse.ok) {
+            const createdUser = await createUserResponse.json();
+            globaluserId = createdUser._id; 
+            console.log("success " + globaluserId);
+        } else {
+            console.log("Failed to create user");
         }
-      }
-
-      if (userFound) {
-        console.log("user found")
-      } else {
-        // User not found
-        console.log("User not found in the database");
-      }
-
-      if (!response.ok) {
-        // more checks to see if it was a transmission error or if the
-        // user does not exist
-        console.log("could not find user in database");
-      } else {
-        // Other actions after successful authorization
-      }
+        } catch (error) {
+        console.error("Error creating user:", error);
+        }
     };
 
     authorize();
@@ -65,5 +71,7 @@ const Signup = (props) => {
     </div>
   );
 };
+
+export { globaluserId }
 
 export default Signup;

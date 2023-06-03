@@ -21,7 +21,7 @@ const Login = (props) => {
       }
 
       if (userFound) {
-        
+        console.log("user found")
       } else {
         // User not found
         console.log("User not found in the database");
@@ -67,7 +67,6 @@ const Login = (props) => {
         <h1>Click here to create an account</h1>
       </Link>
     </div>
-
   );
 };
 

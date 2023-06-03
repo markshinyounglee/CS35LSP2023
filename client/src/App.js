@@ -5,6 +5,9 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Navbar from './components/Navbar'
 import Signup from './pages/Signup';
+import ProfilePage from './pages/ProfilePage';
+
+// create local user variable (login initializes this)
 
 function App() {
   return (
@@ -21,6 +24,10 @@ function App() {
             />
             <Route
               path="/create-account" element={<Signup/>}
+            />
+            <Route
+              // pass user variable into here
+              path="/profile" element={<ProfilePage/>}
             />
           </Routes>
         </div>

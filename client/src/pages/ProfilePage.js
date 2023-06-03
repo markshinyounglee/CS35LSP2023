@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { globaluserId } from './Signup';
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
@@ -9,8 +10,9 @@ const ProfilePage = () => {
     // Example: Fetch user data using axios library
     const fetchUser = async () => {
       try {
-        const response = await axios.get('/api/user/' + user._id); // Adjust the API endpoint accordingly
-        setUser(response.data);
+        const response = await fetch("/api/user/" + globaluserId); // Replace 'userId' with the actual user ID
+        const data = await response.json();
+        setUser(data);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
