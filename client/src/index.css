@@ -1,6 +1,7 @@
 @font-face {
   font-family: 'Jura';
-  src: url('D:/Beefreal/CS35LSP2023/client/src/fonts/Jura/JURA-BOLD.TTF');
+  src: url('./fonts/Jura/JURA-BOLD.TTF');
+
 }
 
 /* Global Styling */
