@@ -22,12 +22,18 @@
     "dotenv": "^16.1.3",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "http-proxy-agent": "^7.0.0",
     "http-proxy-middleware": "^2.0.6",
     "lodash": "^4.17.21",
     "mongodb": "^5.5.0",
     "mongoose": "^7.2.2",
     "puppeteer": "^20.5.0",
+<<<<<<< HEAD
     "react-router-dom": "^6.11.2"
+=======
+    "react-router-dom": "^6.11.2",
+    "react-scripts": "^5.0.1"
+>>>>>>> c8f3f2041ea135324b7a321207bb51b49b999189
   },
   "repository": "https://github.com/markshinyounglee/CS35LSP2023.git"
 }

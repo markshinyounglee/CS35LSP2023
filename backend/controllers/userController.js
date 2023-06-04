@@ -129,6 +129,18 @@ const addUserBlock = async (req, res) => {
   res.status(200).json(user)
 }
 
+//NOTE : FOR SOME REASON THIS ONLY WORKS IF YOU USE IT TWICE
+//TODO : DELETE THIS USER FROM ALL OTHER USERS' FRIENDLISTS AND BLOCKLISTS
+const deleteUser = async(req, res) => {
+  const {id} = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such user'})
+  }
+  const user = await User.findOneAndDelete({_id : id})
+ 
+  res.status(200).json(user)
+}
 
 module.exports = {
     getUsers,
@@ -138,5 +150,9 @@ module.exports = {
     addUserFriend,
     addUserBlock,
     getUserByName,
+<<<<<<< HEAD
     getAllBeefsOfUser
+=======
+    deleteUser
+>>>>>>> c8f3f2041ea135324b7a321207bb51b49b999189
 }

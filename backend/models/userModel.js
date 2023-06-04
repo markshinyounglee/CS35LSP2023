@@ -41,6 +41,9 @@ const userSchema = new Schema( {
             type : String
         }
     }
+    //myvotes
+
+    //map mymessages (key = user I'm chatting with id), (payload = (dict (key = timestamp), (payload = message)))
 }, {timestamps: true})
 
 //TO-DO : MAYBE ADD A NOTIFICATIONS ARRAY OF NOTIFICATIONS A USER CAN RECEIVE FOR UPDATES LIKE WHEN A FRIEND IS MADE, A BEEF IS STARTED WITH YOU, ETC...

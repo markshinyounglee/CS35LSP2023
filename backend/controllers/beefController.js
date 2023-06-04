@@ -37,8 +37,15 @@ try {
     user1,
     user2,
     votesForUser2,
-  });
+  });  
+
   res.status(200).json(beef);
+// Update the user documents with the new beef ID
+  await User.updateMany(
+    
+    { _id: { $in: [user1, user2] } },
+    { $push: { mybeefs: beef._id } }
+  );
 } catch (error) {
   res.status(400).json({ error: error.message });
 }}
