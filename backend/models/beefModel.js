@@ -29,6 +29,14 @@ const beefSchema = new Schema({
         //beef's votes for user 2
         type: Number,
         required: true
+    },
+    user1Name: {
+        type: String,
+        required: true
+    },
+    user2Name: {
+        type: String,
+        required: true
     }
 
 }, {timestamps: true})

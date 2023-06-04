@@ -15,25 +15,7 @@ const getUser = async(req, res) =>{
     }
     res.status(200).json(user)
 }
-// get user by name
-const getUserByName = async (req, res) => {
-  try {
-    const { usrname } = req.params;
-    const user = await User.findOne({ usrname });
-    
-    if (user) {
-      // User found
-      res.status(200).json(user);
-    } else {
-      // User not found
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    // Handle the error appropriately
-    console.error('Error fetching user:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-}
+
 //TO-DO : MAKE IT SO CREATING A USER WITH AN EXISTING USERNAME FAILS
 const createUser = async (req, res) => {
     const { usrname, pswd, friendlist, blocklist, mybeefs, s_requests, r_requests } = req.body;
@@ -142,6 +124,5 @@ module.exports = {
     changeUserPswd,
     addUserFriend,
     addUserBlock,
-    getUserByName,
     deleteUser
 }
