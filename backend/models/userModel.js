@@ -40,14 +40,6 @@ const userSchema = new Schema( {
         items : {
             type : String
         }
-    },
-    myvotes : {
-        //holds array of beef object ids that this user has already voted on
-        //Taejus should insert the beef's id into the user that voted on the beef
-        type: Array,
-        items: {
-            type:String
-        }
     }
     //myvotes
 
