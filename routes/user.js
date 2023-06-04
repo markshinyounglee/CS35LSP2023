@@ -6,11 +6,15 @@ const {
     changeUserPswd,
     addUserFriend,
     addUserBlock,
-    getUserByName
+    getUserByName,
+    deleteUser
 } = require('../backend/controllers/userController')
 
 const router2 = express.Router()
 const mongoose = require('mongoose')
+
+//THIS FUNCTION IS ONLY USED FOR POSTMAN TESTING PURPOSES (DO NOT DELETE USERS)
+router2.delete('/:id', deleteUser)
 
 //Get all Users
 router2.get('/', getUsers)
