@@ -4,7 +4,6 @@ const mongoose = require('mongoose')
 //get all users
 const getUsers = async(req, res) =>{
     const users = await User.find({}).sort({createdAt: -1})
-
     res.status(200).json(users)
 }
 const getUser = async(req, res) =>{
@@ -35,10 +34,14 @@ const getUserByName = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
-
+//TO-DO : MAKE IT SO CREATING A USER WITH AN EXISTING USERNAME FAILS
 const createUser = async (req, res) => {
     const { usrname, pswd, friendlist, blocklist, mybeefs, s_requests, r_requests } = req.body;
     //add doc to database
+    const existing_user = await User.findOne({"usrname" : req.body.usrname})
+    if (existing_user) {
+      return res.status(400).json({error: "This username is taken."});
+    }
     try {
       if (mongoose.connection.readyState !== 1) {
         throw new Error('MongoDB connection is not ready');
@@ -57,6 +60,7 @@ const createUser = async (req, res) => {
     } catch (error) {
       res.status(400).json({ error: error.message });
     }}
+
 const changeUserPswd = async (req, res) => {
   const {id} = req.params
 
@@ -75,7 +79,8 @@ const changeUserPswd = async (req, res) => {
 
   res.status(200).json(user)
 }
-//I think that this should be a sub feature of accepting and sending requests
+
+//MAKE IT SO ADDING AN EXISTING FRIEND FAILS
 const addUserFriend = async (req, res) => {
   const {id} = req.params
 
@@ -95,6 +100,7 @@ const addUserFriend = async (req, res) => {
   res.status(200).json(user)
 }
 
+//MAKE IT SO BLOCKING AN EXISTING BLOCK FAILS
 const addUserBlock = async (req, res) => {
   const {id} = req.params
 
