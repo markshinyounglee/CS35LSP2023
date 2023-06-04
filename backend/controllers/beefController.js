@@ -96,6 +96,7 @@ const updateBeef = async (req, res) => {
 }
 
 
+
 module.exports = {
     createBeef,
     getBeef,
