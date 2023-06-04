@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useHistory
 import { globaluserId } from './Signup';
 
 const ProfilePage = () => {
+  const navigate = useNavigate(); // Create history object
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState(''); // Add the state for 'title'
-  const [description, setDescription] = useState(''); // Add the state for 'description'
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [otheruser, setOtherUser] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false); // Add formSubmitted state
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,11 +30,46 @@ const ProfilePage = () => {
     fetchUser();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle the form submission and process the 'title' and 'description' values here
-    console.log(title, description);
+    
+    try {
+      const newBeef = {
+        title: title,
+        description: description,
+        votesForUser1: 0, 
+        votesForUser2: 0, 
+        user1: globaluserId, 
+        user2: otheruser, 
+      };
+
+      const createBeefResponse = await fetch("/api/beef", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newBeef),
+      });
+
+      if (createBeefResponse.ok) {
+        const createdBeef = await createBeefResponse.json();
+        console.log("Beef created:", createdBeef);
+        setFormSubmitted(true); // Update formSubmitted state
+        // Handle any further actions after creating the beef
+      } else {
+        console.log("Failed to create beef");
+      }
+    } catch (error) {
+      console.error("Error creating beef:", error);
+    }
   }
+
+  // Render different content based on formSubmitted state
+  useEffect(() => {
+    if (formSubmitted) {
+      navigate("/profile"); // Replace with your profile page route
+    }
+  }, [formSubmitted, navigate]);
 
   return (
     <div>
@@ -55,7 +94,6 @@ const ProfilePage = () => {
               <li key={beef}>{beef}</li>
             ))}
           </ul>
-          <button type="submit">Create Beef</button>
           
           <form className="beef-form" onSubmit={handleSubmit}>
             <label htmlFor="title">Title</label>
@@ -76,7 +114,16 @@ const ProfilePage = () => {
               id="description"
               name="description"
             />
-            <button type="submit">Submit</button>
+            <label htmlFor="description">Who are you beefing with?</label>
+            <input
+              value={otheruser}
+              onChange={(e) => setOtherUser(e.target.value)}
+              type="text"
+              placeholder="Enter the username"
+              id="user2"
+              name="user2"
+            />
+            <button type="submit">Create Beef</button>
           </form>
         </div>
       ) : (

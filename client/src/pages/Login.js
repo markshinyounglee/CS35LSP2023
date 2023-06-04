@@ -24,6 +24,7 @@ const Login = (props) => {
         console.log("user found")
       } else {
         // User not found
+        // Redirect to signup page
         console.log("User not found in the database");
       }
 

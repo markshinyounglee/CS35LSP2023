@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 const CreateBeef = () => {
-    const [title, setTitle] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();

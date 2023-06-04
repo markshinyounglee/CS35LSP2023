@@ -1,7 +1,13 @@
 @font-face {
   font-family: 'Jura';
   src: url('./fonts/Jura/JURA-BOLD.TTF');
+  font-weight: bold;
+}
 
+@font-face {
+  font-family: 'Jura';
+  src: url('./fonts/Jura/JURA-REGULAR.TTF');
+  font-weight: lighter;
 }
 
 /* Global Styling */
