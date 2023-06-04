@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+//initialize votesForUser1 and votesForUser2 to 0 and don't make them required
 const Schema = mongoose.Schema
 const beefSchema = new Schema({
     title: {
