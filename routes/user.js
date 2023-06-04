@@ -6,10 +6,13 @@ const {
     changeUserPswd,
     addUserFriend,
     addUserBlock,
+<<<<<<< HEAD
     getUserByName,
 <<<<<<< HEAD
     getAllBeefsOfUser
 =======
+=======
+>>>>>>> 28883c8e7fcb8fc577cedba0f7adedbc7654f474
     deleteUser
 >>>>>>> c8f3f2041ea135324b7a321207bb51b49b999189
 } = require('../backend/controllers/userController')
@@ -26,8 +29,11 @@ router2.get('/', getUsers)
 //Get a User (based on MongoDB id)
 router2.get('/:id', getUser)
 
+<<<<<<< HEAD
 //get a user by name: not working currently
 router2.get('/:usrname', getUserByName)
+=======
+>>>>>>> 28883c8e7fcb8fc577cedba0f7adedbc7654f474
 
 router2.get(':/id', getAllBeefsOfUser)
 

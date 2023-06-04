@@ -29,8 +29,21 @@ const beefSchema = new Schema({
         //beef's votes for user 2
         type: Number,
         required: true
+    },
+    usersThatVotedForUser1: {
+        //Taejus should insert the user id when they vote for user 1 on a beef object
+        type: Array,
+        items: {
+            type: String
+        }
+    },
+    usersThatVotedForUser2: {
+        //Taejus should insert the user id when they vote for user 2 on a beef object
+        type: Array,
+        items: {
+            type: String
+        }
     }
-
 }, {timestamps: true})
 
 module.exports = mongoose.model('Beef', beefSchema)
