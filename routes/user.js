@@ -10,7 +10,8 @@ const {
     denyUserRequest,
     addUserBlock,
     removeUserBlock,
-    deleteUser
+    deleteUser,
+    addUserBeef
 } = require('../backend/controllers/userController')
 
 const router2 = express.Router()
@@ -56,6 +57,8 @@ router2.patch('/:id/removeUserBlock', removeUserBlock)
 
 //THIS FUNCTION IS ONLY USED FOR POSTMAN TESTING PURPOSES (DO NOT DELETE USERS)
 router2.delete('/:id', deleteUser)
+
+router2.patch('/:id/addUserBeef', addUserBeef)
 
 //Accept request
     //Add the r_request to your friendlist, add s_request to your friend's friendlist

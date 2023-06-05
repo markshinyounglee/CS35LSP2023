@@ -301,6 +301,32 @@ const deleteUser = async(req, res) => {
   res.status(200).json(user)
 }
 
+
+const addUserBeef = async (req, res) => {
+  const { id } = req.params;
+  const dummy = await User.findById(id)
+  if (!dummy) {
+    return res.status(404).json({ error: 'No such user' });
+  }
+
+
+  const already_added = await User.findById(id);
+  if (already_added.mybeefs.includes(req.body.mybeefs)) {
+    return res.status(400).json({error : "Already added this beef"})
+  }
+  const user = await User.findOneAndUpdate( {_id : id}, {
+    $push: {mybeefs : req.body.mybeefs}},
+    {new : true}
+  );
+  if (!user) {
+    return res.status(400).json({error : 'Unable to add beef at this time'})
+  }
+  console.log(user)
+  res.status(200).json(user);
+};
+
+
+
 module.exports = {
     getUsers,
     getUser,
@@ -312,5 +338,6 @@ module.exports = {
     denyUserRequest,
     addUserBlock,
     removeUserBlock,
-    deleteUser
+    deleteUser,
+    addUserBeef
 }
