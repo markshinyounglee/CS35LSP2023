@@ -47,7 +47,7 @@ try {
     { $push: { mybeefs: beef._id } }
   );
 } catch (error) {
-  res.status(400).json({ error: error.message });
+  //res.status(400).json({ error: error.message });
 }}
 
 // delete a beef

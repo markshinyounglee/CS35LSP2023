@@ -1,44 +1,58 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom';
 
-const Login = (props) => {
+
+let loginUserId = '';
+
+
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
 
     const authorize = async () => {
       const response = await fetch("/api/user/");
       const users = await response.json();
 
+
       let userFound = false;
-      for (const user of users) {
-        if (user.usrname === email) {
-          userFound = true;
-          break;
+      if (response.ok) {
+        for (const user of users) {
+          if (user.usrname === email) {
+            userFound = true;
+            loginUserId = user._id;
+            break;
+          }
         }
       }
 
+
       if (userFound) {
-        console.log("user found")
+        console.log("User found");
+        navigate("/profile", { state: { loginUserId } });
       } else {
-        // User not found
-        // Redirect to signup page
         console.log("User not found in the database");
       }
+
 
       if (!response.ok) {
         // more checks to see if it was a transmission error or if the
         // user does not exist
-        console.log("could not find user in database");
+        console.log("Could not find user in the database");
       } else {
         // Other actions after successful authorization
       }
     };
 
-    authorize();
+
+    await authorize();
   };
+
 
   return (
     <div className="auth-form-container">
@@ -71,4 +85,6 @@ const Login = (props) => {
   );
 };
 
+
+export { loginUserId };
 export default Login;
