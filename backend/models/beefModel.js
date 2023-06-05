@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const beefSchema = new Schema({
 <<<<<<< HEAD
+<<<<<<< HEAD
     title: {
         //beef's name
         type: String,
@@ -32,6 +33,8 @@ const beefSchema = new Schema({
         required: true
     }
 =======
+=======
+>>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
    title: {
        //beef's name
        type: String,
@@ -74,6 +77,9 @@ const beefSchema = new Schema({
            type: String
        }
    }
+<<<<<<< HEAD
+>>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
+=======
 >>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
 }, {timestamps: true})
 

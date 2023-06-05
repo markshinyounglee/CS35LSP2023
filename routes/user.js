@@ -11,6 +11,7 @@ const {
     addUserBlock,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     getUserByName,
 <<<<<<< HEAD
     getAllBeefsOfUser
@@ -19,6 +20,11 @@ const {
 >>>>>>> 28883c8e7fcb8fc577cedba0f7adedbc7654f474
     deleteUser
 >>>>>>> c8f3f2041ea135324b7a321207bb51b49b999189
+=======
+    removeUserBlock,
+    deleteUser,
+    addUserBeef
+>>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
 =======
     removeUserBlock,
     deleteUser,
@@ -38,6 +44,7 @@ router2.get('/:id', getUser)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 //get a user by name: not working currently
 router2.get('/:usrname', getUserByName)
 =======
@@ -46,6 +53,8 @@ router2.get('/:usrname', getUserByName)
 router2.get(':/id', getAllBeefsOfUser)
 
 
+=======
+>>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
 =======
 >>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
 

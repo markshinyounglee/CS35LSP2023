@@ -35,7 +35,11 @@ const createUser = async (req, res) => {
     //add doc to database
     const existing_user = await User.findOne({"usrname" : req.body.usrname})
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (existing_user) {
+=======
+    if (existing_user > 0) {
+>>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
 =======
     if (existing_user > 0) {
 >>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
@@ -61,6 +65,10 @@ const createUser = async (req, res) => {
     }}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+//TO-DO : MAKE IT SO YOU CAN'T CHANGE YOUR PASSWORD TO YOUR EXISTING PASSWORD
+>>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
 =======
 //TO-DO : MAKE IT SO YOU CAN'T CHANGE YOUR PASSWORD TO YOUR EXISTING PASSWORD
 >>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
@@ -84,8 +92,13 @@ const changeUserPswd = async (req, res) => {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //MAKE IT SO ADDING AN EXISTING FRIEND FAILS
 const addUserFriend = async (req, res) => {
+=======
+//TODO : CAN'T REQUEST SOMEONE IF THEY BLOCKED YOU
+const makeUserRequest = async (req, res) => {
+>>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
 =======
 //TODO : CAN'T REQUEST SOMEONE IF THEY BLOCKED YOU
 const makeUserRequest = async (req, res) => {
@@ -153,7 +166,10 @@ const unsendUserRequest = async (req, res) => {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
   const request = await User.findOneAndUpdate({_id: id}, {
     $pull : {s_requests : req.body.s_requests}},
     {new : true}
@@ -243,6 +259,9 @@ const acceptUserRequest = async (req, res) => {
     res.status(200).json(request)
     }
 
+<<<<<<< HEAD
+>>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
+=======
 >>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
 //MAKE IT SO BLOCKING AN EXISTING BLOCK FAILS
 const addUserBlock = async (req, res) => {
@@ -368,6 +387,7 @@ module.exports = {
     addUserBlock,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     getUserByName,
 <<<<<<< HEAD
     getAllBeefsOfUser
@@ -376,6 +396,11 @@ module.exports = {
 >>>>>>> 28883c8e7fcb8fc577cedba0f7adedbc7654f474
     deleteUser
 >>>>>>> c8f3f2041ea135324b7a321207bb51b49b999189
+=======
+    removeUserBlock,
+    deleteUser,
+    addUserBeef
+>>>>>>> 16ef78644d74e5d49674a4b34d41916062713fc1
 =======
     removeUserBlock,
     deleteUser,
