@@ -74,11 +74,20 @@ import BeefDetails from '../components/BeefDetails';
         if (createBeefResponse.ok) {
           const createdBeef = await createBeefResponse.json();
           const users = await fetch('/api/user');
-          const usersData = await users.json(); // Added 'await' keyword
-         
-          for (const user of usersData) { // Added 'const' keyword
-            if (user.usrname === otheruser) { // Fixed comparison operator
-              user.mybeefs.push(createdBeef._id);
+          const usersData = await users.json(); 
+          for (const user of usersData) { 
+            if (user.usrname === otheruser || user._id === location.state.loginUserId) {
+              console.log(user.usrname)
+              const updatedUser = {
+                mybeefs: createdBeef._id, // Append createdBeef._id to the mybeefs array
+              };
+              await fetch(`/api/user/${user._id}/patchUser`, {
+                method: "PATCH",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedUser),
+              });
             }
           }
 
@@ -93,7 +102,7 @@ import BeefDetails from '../components/BeefDetails';
       } catch (error) {
         console.error("Error creating beef:", error);
       }
-      navigate('/', { state: location.state });
+      navigate('/profile', { state: location.state });
     }
 
 

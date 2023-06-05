@@ -28,14 +28,10 @@ const VoteButton = ({ beef, count, flag }) => {
           responseData.usersThatVotedForUser1.push(loginUserId) // push not happening here
           console.log('we can vote again')
          }
-       
          else {
            console.log('we voted for this already')
          }
-
-
        } else {
-       
        }
      } catch (error) {
        console.error('Error occurred while updating the vote count:', error);

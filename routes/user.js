@@ -7,11 +7,13 @@ const {
     addUserFriend,
     addUserBlock,
     getUserByName,
-    deleteUser
+    deleteUser, 
+    patchUserBeefArray
 } = require('../backend/controllers/userController')
 
 const router2 = express.Router()
 const mongoose = require('mongoose')
+const { patch } = require('semver')
 
 //THIS FUNCTION IS ONLY USED FOR POSTMAN TESTING PURPOSES (DO NOT DELETE USERS)
 router2.delete('/:id', deleteUser)
@@ -38,6 +40,7 @@ router2.patch('/:id/addUserFriend', addUserFriend)
 
 router2.patch('/:id/addUserBlock', addUserBlock)
 
+router2.patch('/:id/patchUser', patchUserBeefArray)
 //Remove a friend
 
 //Unblock someone
