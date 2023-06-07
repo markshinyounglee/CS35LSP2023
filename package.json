@@ -29,7 +29,8 @@
     "mongoose": "^7.2.2",
     "puppeteer": "^20.5.0",
     "react-router-dom": "^6.11.2",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "socket.io": "^4.6.2"
   },
   "repository": "https://github.com/markshinyounglee/CS35LSP2023.git"
 }

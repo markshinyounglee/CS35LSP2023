@@ -17,10 +17,10 @@ function App() {
         <div className="pages">
           <Routes>
             <Route
-              path="/" element={<Home />}         
+              path="/login" element={<Login />}
             />
             <Route
-              path="/login" element={<Login />}
+              path="/home" element={<Home />}         
             />
             <Route
               path="/create-account" element={<Signup/>}

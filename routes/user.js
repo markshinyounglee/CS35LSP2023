@@ -41,6 +41,7 @@ router2.patch('/:id/addUserFriend', addUserFriend)
 router2.patch('/:id/addUserBlock', addUserBlock)
 
 router2.patch('/:id/patchUser', patchUserBeefArray)
+
 //Remove a friend
 
 //Unblock someone

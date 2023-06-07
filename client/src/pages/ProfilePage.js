@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-
-// components
 import BeefDetails from '../components/BeefDetails';
 
+import socket from '../WebSocket';
 
-  const Home = () => {
+  const ProfilePage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
     const [beefs, setBeefs] = useState(null);
@@ -18,6 +17,23 @@ import BeefDetails from '../components/BeefDetails';
     const navigate = useNavigate();
  
     useEffect(() => {
+      socket.on('connect', () => {
+        console.log('Connected to the server');
+      });
+
+      socket.on('userUpdated', ( {userId} ) => {
+        //const response = await fetch()
+        if (userId === location.state.loginUserId) {
+          fetchUserBeefs()
+          console.log(`Client recieved event that user ${userId} updated their beef array`)
+        }
+        // Handle event here
+      })
+
+      socket.on('disconnect', () => {
+        console.log('Disconnected from the server');
+      });
+
       const fetchUserBeefs = async () => {
         try {
           const response = await fetch("/api/user/" + location.state.loginUserId);
@@ -45,6 +61,13 @@ import BeefDetails from '../components/BeefDetails';
       } else {
         setIsLoggedIn(false);
       }
+
+      return () => {
+        socket.off('connect');
+        socket.off('userUpdated');
+        socket.off('disconnect');
+      }
+
     }, [location]);
 
 
@@ -57,7 +80,7 @@ import BeefDetails from '../components/BeefDetails';
           description: description,
           votesForUser1: 0,
           votesForUser2: 0,
-          user1: location.state.loginUserId,
+          user1: userInfo.usrname,
           user2: otheruser,
           usersThatVotedForUser1: [], 
           usersThatVotedForUser2: []
@@ -77,9 +100,8 @@ import BeefDetails from '../components/BeefDetails';
           const usersData = await users.json(); 
           for (const user of usersData) { 
             if (user.usrname === otheruser || user._id === location.state.loginUserId) {
-              console.log(user.usrname)
               const updatedUser = {
-                mybeefs: createdBeef._id, // Append createdBeef._id to the mybeefs array
+                mybeefs: createdBeef._id, 
               };
               await fetch(`/api/user/${user._id}/patchUser`, {
                 method: "PATCH",
@@ -90,11 +112,6 @@ import BeefDetails from '../components/BeefDetails';
               });
             }
           }
-
-
-          const user1 = await fetch('/api/user/' + location.state.loginUserId)
-          const user1Data = await user1.json()
-          user1Data.mybeefs.push(createdBeef._id)
         }
          else {
           console.log("Failed to create beef");
@@ -177,4 +194,4 @@ import BeefDetails from '../components/BeefDetails';
       </div>
     );
   }
-export default Home;
+export default ProfilePage;

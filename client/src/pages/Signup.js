@@ -1,17 +1,36 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
-let globaluserId = '' 
+let loginUserId = ''
 
-const Signup = (props) => {
+const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const authorize = async () => {
-    try {
-        const newUser = {
+      const response = await fetch("/api/user/");
+      const users = await response.json();
+
+      let userFound = false;
+      for (const user of users) {
+        if (user.usrname === email || user.pswd === password) {
+          userFound = true;
+          break;
+        }
+      }
+
+      if (userFound) {
+        console.log("User already exists");
+        // Redirect to signup page and show message
+        navigate("/create-account");
+      } else {
+        console.log("User not found");
+        try {
+          const newUser = {
             usrname: email,
             pswd: password,
             friendlist: [],
@@ -19,29 +38,30 @@ const Signup = (props) => {
             mybeefs: [],
             s_requests: [],
             r_requests: [],
-        };
+          };
 
-        const createUserResponse = await fetch("/api/user/", {
+          const createUserResponse = await fetch("/api/user/", {
             method: "POST",
             headers: {
-            "Content-Type": "application/json",
+              "Content-Type": "application/json",
             },
             body: JSON.stringify(newUser),
-        });
+          });
 
-        if (createUserResponse.ok) {
-            const createdUser = await createUserResponse.json();
-            globaluserId = createdUser._id; 
-            console.log("success " + globaluserId);
-        } else {
+          if (createUserResponse.ok) {
+            const createdUser = await createUserResponse.json()
+            loginUserId = createdUser._id
+            navigate("/profile", { state: { loginUserId } });
+          } else {
             console.log("Failed to create user");
-        }
+          }
         } catch (error) {
-        console.error("Error creating user:", error);
+          console.error("Error creating user:", error);
         }
+      }
     };
 
-    authorize();
+    await authorize();
   };
 
   return (
@@ -66,12 +86,10 @@ const Signup = (props) => {
           id="password"
           name="password"
         />
-        <button type="submit">Log In</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
 };
-
-export { globaluserId }
 
 export default Signup;

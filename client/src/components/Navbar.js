@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import socket from '../WebSocket';
 
 
 const Navbar = () => {
@@ -10,8 +11,6 @@ const Navbar = () => {
 
     useEffect(() => {
         const { state } = location;
-
-
         if (state && state.loginUserId && state.loginUserId.length !== 0) {
             setIsLoggedIn(true);
         } else {
@@ -21,9 +20,8 @@ const Navbar = () => {
 
 
     const handleLogout = () => {
-        // Perform logout logic here
-        // Clear the loginUserId state and navigate to the login page
         setIsLoggedIn(false);
+        
         navigate('/login', { state: {} });
     };
 
@@ -36,7 +34,6 @@ const Navbar = () => {
     const handleHomeClick = () => {
         navigate('/', { state: location.state });
     };
-
 
     return (
         <header>

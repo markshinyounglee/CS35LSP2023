@@ -1,6 +1,10 @@
 const User = require('../models/userModel.js')
 const mongoose = require('mongoose')
 
+// Events
+const { EventEmitter } = require('events')
+const eventEmitter = new EventEmitter()
+
 //get all users
 const getUsers = async(req, res) =>{
     const users = await User.find({}).sort({createdAt: -1})
@@ -113,6 +117,7 @@ const addUserBlock = async (req, res) => {
     return res.status(404).json({error: 'No such user'})
   }
 
+  eventEmitter.emit('userUpdated', { userId: dummy.id.toString() })
   res.status(200).json(user)
 }
 
@@ -148,9 +153,11 @@ const patchUserBeefArray = async (req, res) => {
   if (!user) {
     return res.status(400).json({error : 'Unable to add beef at this time'})
   }
-  console.log(user)
+  
+  eventEmitter.emit('userUpdated', { userId: dummy.id.toString() })
   res.status(200).json(user);
 };
+
 
   // const  beefId  = req.body.mybeefs;
 
@@ -182,5 +189,6 @@ module.exports = {
     addUserBlock,
     getUserByName,
     deleteUser,
-    patchUserBeefArray
+    patchUserBeefArray,
+    eventEmitter
 }
