@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+import { Configuration, OpenAIApi } from "openai"
+import { getMessage } from "../chatai"
 
 import BeefDetails from '../components/BeefDetails';
 
 
 import socket from '../WebSocket';
-
 
   const ProfilePage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -105,8 +105,8 @@ import socket from '../WebSocket';
     }, [location]);
 
 
-    const generateAIBeef =() =>{
-      //Mark put code here
+    const generateAIBeef = async () => {
+      aiBeefOutput = await getMessage()
     }
 
 
