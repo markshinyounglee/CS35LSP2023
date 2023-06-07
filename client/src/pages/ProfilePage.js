@@ -18,6 +18,7 @@ import socket from '../WebSocket';
     const [otheruser, setOtherUser] = useState('');
     const location = useLocation();
     const navigate = useNavigate();
+    const [friendUsernameInput, setFriendUsernameInput] = useState('');
  
     useEffect(() => {
       socket.on('connect', () => {
@@ -93,6 +94,12 @@ import socket from '../WebSocket';
     }, [location]);
 
 
+    const sendFriendRequest = async (friendUsernameInput) => {
+        friendUsernameInput.preventDefault();
+
+        
+    }
+
     const handleSubmit = async (e) => {
       e.preventDefault();
      
@@ -154,18 +161,29 @@ import socket from '../WebSocket';
               <div className='user-info'>
                 <h1>Welcome, {userInfo.usrname}!</h1>
                 <h2>Friend List:</h2>
-                      <ul>
-                        {friendUsernames.map((friendUsername) => (
-                          <li key={friendUsername}>{friendUsername}</li>
-                        ))}
-                      </ul>
-                      <h2>Block List:</h2>
-                        <ul>
-                          {blockedUsernames.map((blockedUsername) => (
-                            <li key={blockedUsername}>{blockedUsername}</li>
-                          ))}
-                        </ul>
+                <ul>
+                  {friendUsernames.map((friendUsername) => (
+                    <li key={friendUsername}>{friendUsername}</li>
+                  ))}
+                </ul>
+                <h2>Block List:</h2>
+                <ul>
+                  {blockedUsernames.map((blockedUsername) => (
+                    <li key={blockedUsername}>{blockedUsername}</li>
+                  ))}
+                </ul>
                 <h2>My Beefs:</h2>
+                <div>
+                  <input
+                    value={friendUsernameInput}
+                    onChange={(e) => setFriendUsernameInput(e.target.value)}
+                    type="text"
+                    placeholder="Enter username"
+                    id="friend-username"
+                    name="friend-username"
+                  />
+                  <button onClick={sendFriendRequest}>Add Friend</button> {/* Friend Request Button */}
+                </div>
               </div>
             ) : (
               <h1>Loading user information...</h1>
@@ -216,5 +234,6 @@ import socket from '../WebSocket';
         )}
       </div>
     );
+    
   }
 export default ProfilePage;
