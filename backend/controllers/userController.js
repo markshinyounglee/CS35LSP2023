@@ -158,26 +158,88 @@ const patchUserBeefArray = async (req, res) => {
   res.status(200).json(user);
 };
 
+const makeUserRequest = async (req, res) => {
+  const {id} = req.params
+  const user = await User.findById(id)
 
-  // const  beefId  = req.body.mybeefs;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such user'})
+  }
 
-  // try {
-  //   const user = await User.findByIdAndUpdate(
-  //     id,
-  //     { $push: { mybeefs: beefId._id } },
-  //     { new: true }
-  //   );
+  console.log('Before:', req.body.s_requests);
+  const my_request_id = new mongoose.Types.ObjectId(req.body.s_requests);
+  console.log('After:', my_request_id);
+  if (id== my_request_id) {
+    return res.status(400).json({error : "You cannot make a friend request to yourself"});
+  }
 
-  //   if (!user) {
-  //     return res.status(404).json({ error: 'User not found' });
-  //   }
+  const other_user_exists = await User.findById(new mongoose.Types.ObjectId(req.body.s_requests));
+  console.log(other_user_exists);
+  if (!other_user_exists) {
+    return res.status(404).json({error : 'The user you are trying to request does not exist'});
+  }
+  if (other_user_exists.blocklist.includes(id)) {
+    return res.status(400).json({error : "That user has blocked you, you cannot send them a request."})
+  }
+  if (user.friendlist.includes(req.body.s_requests)) {
+    return res.status(400).json({error: 'You are already friends with that user!'})
+  }
+  if (user.s_requests.includes(req.body.s_requests) ) {
+    return res.status(400).json({error: 'This request has already been sent.'});
+  }
 
-  //   res.json(user);
-  // } catch (error) {
-  //   res.status(500).json({ error: 'Internal server error' });
-  // }
+  const request = await User.findOneAndUpdate({_id: id}, {
+    $push : {s_requests : req.body.s_requests}},
+    {new : true}
+  );
+  if (!request) {
+    return res.status(404).json({error : 'This request cannot be made right now'})
+  }
+  const other_user = await User.findOneAndUpdate( {_id: req.body.s_requests}, {
+    $push : {r_requests: id}},
+    {new : true}
+  );
+  if (!other_user) {
+    return res.status(400).json({error : "Unable to make request at this time."})
+  }
+  res.status(200).json(request)
+}
 
-//module.exports = patchUser;
+const unsendUserRequest = async (req, res) => {
+  const {id} = req.params
+  const user = await User.findById(id)
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such user'})
+  }
+
+  const other_user_exists = await User.findById(new mongoose.Types.ObjectId(req.body.s_requests));
+  if (!other_user_exists) {
+    return res.status(404).json({error : 'The user you are trying to request does not exist'});
+  }
+  if (!user.s_requests.includes(req.body.s_requests) ) {
+    return res.status(400).json({error: "This request hasn't been sent."});
+  }
+
+  const request = await User.findOneAndUpdate({_id: id}, {
+    $pull : {s_requests : req.body.s_requests}},
+    {new : true}
+  );
+
+  if (!request) {
+    return res.status(404).json({error : 'This request cannot be made right now'})
+  }
+  const other_user = await User.findOneAndUpdate( {_id: req.body.s_requests}, {
+    $pull : {r_requests: id}},
+    {new : true}
+  );
+  if (!other_user) {
+    return res.status(400).json({error : "Unable to make request at this time."})
+  }
+  res.status(200).json(request)
+
+  
+}
 
 
 module.exports = {
@@ -190,5 +252,7 @@ module.exports = {
     getUserByName,
     deleteUser,
     patchUserBeefArray,
+    makeUserRequest,
+    unsendUserRequest,
     eventEmitter
 }

@@ -8,7 +8,9 @@ const {
     addUserBlock,
     getUserByName,
     deleteUser, 
-    patchUserBeefArray
+    patchUserBeefArray,
+    makeUserRequest,
+    unsendUserRequest
 } = require('../backend/controllers/userController')
 
 const router2 = express.Router()
@@ -42,26 +44,8 @@ router2.patch('/:id/addUserBlock', addUserBlock)
 
 router2.patch('/:id/patchUser', patchUserBeefArray)
 
-//Remove a friend
+router2.patch('/:id/makeUserRequest', makeUserRequest)
 
-//Unblock someone
-// router2.patch('/:id', removeUserBlock)
-//Remove a friend
-// router2.patch('/:id', removeUserFriend)
-//Make request
-// router2.patch('/:id/usrname', makeUserRequest)
-//Accept request
-    //Add the r_request to your friendlist, add s_request to your friend's friendlist
-    //Your beefs and their beefs get updated --> notification
-// router2.patch('/:id/request', acceptUserRequest) 
-//Deny request
-    //Denying a request deletes it from your received requests, deletes it from friend's sent requests
-// router2.patch('/:id/request', remove)
-
-//Add a beef
-    //we need a beef instance like Abhi had a user instance so when user 
-// router2.patch('/:id', addUserBeef)
-//Remove a beef
-// router2.patch('/:id', addUserBeef)
+router2.patch('/:id/unsendUserRequest', unsendUserRequest)
 
 module.exports = router2

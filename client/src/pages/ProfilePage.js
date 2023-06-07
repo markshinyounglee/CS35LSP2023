@@ -113,7 +113,7 @@ import socket from '../WebSocket';
 
     const sendFriendRequest = async (friendUsernameInput) => {
         friendUsernameInput.preventDefault();
-
+        
 
        
     }
