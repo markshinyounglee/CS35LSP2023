@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 
 let loginUserId = '';
@@ -33,6 +34,7 @@ const Login = () => {
 
       if (userFound) {
         console.log("User found");
+        toast.success("Login Successful")
         navigate("/profile", { state: { loginUserId } });
       } else {
         console.log("User not found in the database");

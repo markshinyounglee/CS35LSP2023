@@ -6,21 +6,25 @@ import Login from './pages/Login';
 import Navbar from './components/Navbar';
 import Signup from './pages/Signup';
 import ProfilePage from './pages/ProfilePage';
+import Notification from './components/Notification';
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Navbar />
-        <div className="pages">
-          <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/create-account" element={<Signup />} />
-            <Route path="/profile" element={<ProfilePage />} />
-          </Routes>
-        </div>
-      </BrowserRouter>
+    <div className='notis'>
+      <Notification />
+      <div className="App">
+        <BrowserRouter>
+          <Navbar />
+          <div className="pages">
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/create-account" element={<Signup />} />
+              <Route path="/profile" element={<ProfilePage />} />
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </div>
     </div>
   );
 }

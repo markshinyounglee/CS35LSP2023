@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import BeefDetails from '../components/BeefDetails';
 
@@ -112,6 +113,7 @@ import socket from '../WebSocket';
               });
             }
           }
+          toast.success("Beef created successfully")
         }
          else {
           console.log("Failed to create beef");
