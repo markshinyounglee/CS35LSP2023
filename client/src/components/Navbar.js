@@ -13,16 +13,18 @@ const Navbar = () => {
         const { state } = location;
         if (state && state.loginUserId && state.loginUserId.length !== 0) {
             setIsLoggedIn(true);
+            socket.connect()
         } else {
             setIsLoggedIn(false);
+            socket.disconnect()
         }
     }, [location]);
 
 
     const handleLogout = () => {
         setIsLoggedIn(false);
-        
-        navigate('/login', { state: {} });
+        socket.disconnect()
+        navigate('/', { state: {} });
     };
 
 
@@ -32,7 +34,7 @@ const Navbar = () => {
 
 
     const handleHomeClick = () => {
-        navigate('/', { state: location.state });
+        navigate('/home', { state: location.state });
     };
 
     return (
@@ -44,7 +46,7 @@ const Navbar = () => {
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
-                <button onClick={() => navigate('/login')}>Login</button>
+                <button onClick={() => navigate('/')}>Login</button>
             )}
         </header>
     );
