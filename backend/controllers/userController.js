@@ -105,3 +105,90 @@ const addUserBlock = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'No such user'})
   }
+
+  const user = await User.findOneAndUpdate({_id: id}, {
+    $addToSet: { blocklist: req.body.blocklist } },
+    {new: true}
+  );
+  if (user.friendlist.includes(req.body.blocklist)) {
+    user.friendlist.pull(req.body.blocklist);
+  }
+  if (!user) {
+    return res.status(404).json({error: 'No such user'})
+  }
+
+  eventEmitter.emit('userUpdated', { userId: dummy.id.toString() })
+  res.status(200).json(user)
+}
+
+//NOTE : FOR SOME REASON THIS ONLY WORKS IF YOU USE IT TWICE
+//TODO : DELETE THIS USER FROM ALL OTHER USERS' FRIENDLISTS AND BLOCKLISTS
+const deleteUser = async(req, res) => {
+  const {id} = req.params
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such user'})
+  }
+  const user = await User.findOneAndDelete({_id : id})
+ 
+  res.status(200).json(user)
+}
+
+const patchUserBeefArray = async (req, res) => {
+  const { id } = req.params;
+  const dummy = await User.findById(id)
+  if (!dummy) {
+    return res.status(404).json({ error: 'No such user' });
+  }
+
+  const already_added = await User.findById(id);
+  if (already_added.mybeefs.includes(req.body.mybeefs)) {
+    return res.status(400).json({error : "Already added this beef"})
+  }
+  const user = await User.findOneAndUpdate( 
+    {_id : id}, 
+    { $push: {mybeefs : req.body.mybeefs} },
+    {new : true}
+  );
+  if (!user) {
+    return res.status(400).json({error : 'Unable to add beef at this time'})
+  }
+  
+  eventEmitter.emit('userUpdated', { userId: dummy.id.toString() })
+  res.status(200).json(user);
+};
+
+
+  // const  beefId  = req.body.mybeefs;
+
+  // try {
+  //   const user = await User.findByIdAndUpdate(
+  //     id,
+  //     { $push: { mybeefs: beefId._id } },
+  //     { new: true }
+  //   );
+
+  //   if (!user) {
+  //     return res.status(404).json({ error: 'User not found' });
+  //   }
+
+  //   res.json(user);
+  // } catch (error) {
+  //   res.status(500).json({ error: 'Internal server error' });
+  // }
+
+//module.exports = patchUser;
+
+
+module.exports = {
+    getUsers,
+    getUser,
+    createUser,
+    changeUserPswd,
+    addUserFriend,
+    addUserBlock,
+    getUserByName,
+    deleteUser,
+    patchUserBeefArray,
+    eventEmitter
+}
