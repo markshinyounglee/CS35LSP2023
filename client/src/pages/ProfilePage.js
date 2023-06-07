@@ -107,16 +107,40 @@ import socket from '../WebSocket';
 
     const generateAIBeef = async () => {
       aiBeefOutput = await getMessage()
+      setAIBeefOutput(aiBeefOutput);
     }
 
 
 
-    const sendFriendRequest = async (friendUsernameInput) => {
-        friendUsernameInput.preventDefault();
-        
-
-       
-    }
+    const sendFriendRequest = async () => {
+      // loop through all users and find user that matches the friendUsernameInput
+      try {
+        console.log(friendUsernameInput)
+        const users = await fetch('/api/user');
+        const usersData = await users.json();
+        for (const user of usersData) {
+          if (user.usrname === friendUsernameInput) { // Use friendUsernameInput here
+            const friendId = {
+              s_requests: user._id,
+            };
+            
+            // {"s_requests" : "[friend_id]"}
+            await fetch(`/api/user/${location.state.loginUserId}/makeUserRequest`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(friendId),
+            });
+            
+            break; // Exit the loop after finding a matching user
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    
 
 
     const handleSubmit = async (e) => {
