@@ -22,45 +22,41 @@ const getUser = async(req, res) =>{
 }
 // get user by name
 const getUserByName = async (req, res) => {
-  try {
-    const { usrname } = req.params;
-    const user = await User.findOne({ usrname });
-    
-    if (user) {
-      // User found
-      res.status(200).json(user);
-    } else {
-      // User not found
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    // Handle the error appropriately
-    console.error('Error fetching user:', error);
-    res.status(500).json({ message: 'Internal server error' });
+  const {name} = req.params
+  console.log(name)
+  const user = await User.findOne({usrname : name})
+  if (!user) {
+    return res.status(404).json({error: 'No such user'})
   }
+  res.status(200).json(user)
+
 }
 
 const createUser = async (req, res) => {
-    const { usrname, pswd, friendlist, blocklist, mybeefs, s_requests, r_requests } = req.body;
-    //add doc to database
-    try {
-      if (mongoose.connection.readyState !== 1) {
-        throw new Error('MongoDB connection is not ready');
-      }
-    
-      const user = await User.create({
-        usrname,
-        pswd,
-        friendlist,
-        blocklist,
-        mybeefs,
-        s_requests,
-        r_requests
-      });
-      res.status(200).json(user);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }}
+  const { usrname, pswd, friendlist, blocklist, mybeefs, s_requests, r_requests } = req.body;
+  //add doc to database
+  const existing_user = await User.findOne({"usrname" : req.body.usrname})
+  if (existing_user > 0) {
+    return res.status(400).json({error: "This username is taken."});
+  }
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      throw new Error('MongoDB connection is not ready');
+    }
+  
+    const user = await User.create({
+      usrname,
+      pswd,
+      friendlist,
+      blocklist,
+      mybeefs,
+      s_requests,
+      r_requests
+    });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }}
 const changeUserPswd = async (req, res) => {
   const {id} = req.params
 
