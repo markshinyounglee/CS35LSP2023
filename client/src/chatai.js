@@ -5,10 +5,9 @@ import { Configuration, OpenAIApi } from "openai"
 // const submitButton = document.querySelector('#submit')
 // const apiOutputElement = document.querySelector('#output');
 
-const apiKey = process.env.CHATGPT_API_KEY
+const apiKey = "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"
 
 async function getMessage() {
-    config()
     console.log('clicked')
     const options = {
             method: 'POST',
