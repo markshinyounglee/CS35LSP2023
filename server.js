@@ -44,6 +44,11 @@ mongoose.connect(process.env.MONG_URI)
       console.log(`user with ID ${userId} has updated their beef array`)
     });
 
+    eventEmitter.on('beefCreated', ({ beef }) => {
+      io.emit('beefCreated', { beef }); // Emit to all connected sockets
+      console.log(`beef created between ${beef.user1} and ${beef.user2}`)
+    });
+
     server.prependListener("request", (req, res) => {
       res.setHeader("Access-Control-Allow-Origin", "*");
    });

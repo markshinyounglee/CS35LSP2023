@@ -33,6 +33,10 @@ import socket from '../WebSocket';
         // Handle event here
       })
 
+      socket.on('beefCreated', ( {beef} ) => {
+        toast.success(`Beef created between ${beef.user1} and ${beef.user2}`)
+      })
+
       socket.on('disconnect', () => {
         console.log('Disconnected from the server');
       });

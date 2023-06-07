@@ -2,6 +2,8 @@ const Beef = require('../models/beefModel')
 const mongoose = require('mongoose')
 const User = require('../models/userModel')
 
+const { eventEmitter } = require('./userController');
+
 //get all beefs
 const getBeefs = async (req, res) => { 
     const beefs = await Beef.find({}).sort({createdAt: -1})
@@ -40,7 +42,8 @@ try {
   });  
 
   res.status(200).json(beef);
-// Update the user documents with the new beef ID
+
+  eventEmitter.emit('beefCreated', { beef: beef })// Update the user documents with the new beef ID
   await User.updateMany(
     
     { _id: { $in: [user1, user2] } },
