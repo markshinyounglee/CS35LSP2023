@@ -10,6 +10,8 @@ import socket from '../WebSocket';
   const ProfilePage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
+    const [friendUsernames, setFriendUsernames] = useState([]);
+    const [blockedUsernames, setBlockedUsernames] = useState([]);
     const [beefs, setBeefs] = useState(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -48,6 +50,21 @@ import socket from '../WebSocket';
             );
             const activeBeefObjects = await Promise.all(beefPromises);
             setBeefs(activeBeefObjects);
+            // Fetch friend usernames
+              const friendPromises = data.friendlist.map((friendId) =>
+              fetch("/api/user/" + friendId).then((response) => response.json())
+            );
+            const friendData = await Promise.all(friendPromises);
+            const friendUsernames = friendData.map((friend) => friend.usrname);
+            setFriendUsernames(friendUsernames);
+
+            // Fetch blocked usernames
+              const blockedPromises = data.blocklist.map((blockedUserId) =>
+              fetch("/api/user/" + blockedUserId).then((response) => response.json())
+            );
+            const blockedData = await Promise.all(blockedPromises);
+            const blockedUsernames = blockedData.map((blockedUser) => blockedUser.usrname);
+            setBlockedUsernames(blockedUsernames);
           } else {
             console.error("Error:", data);
           }
@@ -133,17 +150,17 @@ import socket from '../WebSocket';
               <div className='user-info'>
                 <h1>Welcome, {userInfo.usrname}!</h1>
                 <h2>Friend List:</h2>
-                <ul>
-                  {userInfo.friendlist.map((friend) => (
-                    <li key={friend}>{friend}</li>
-                  ))}
-                </ul>
-                <h2>Block List:</h2>
-                <ul>
-                  {userInfo.blocklist.map((blockedUser) => (
-                    <li key={blockedUser}>{blockedUser}</li>
-                  ))}
-                </ul>
+                      <ul>
+                        {friendUsernames.map((friendUsername) => (
+                          <li key={friendUsername}>{friendUsername}</li>
+                        ))}
+                      </ul>
+                      <h2>Block List:</h2>
+                        <ul>
+                          {blockedUsernames.map((blockedUsername) => (
+                            <li key={blockedUsername}>{blockedUsername}</li>
+                          ))}
+                        </ul>
                 <h2>My Beefs:</h2>
               </div>
             ) : (
