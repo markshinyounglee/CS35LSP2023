@@ -1,12 +1,12 @@
 import React, { useState, } from 'react';
-import { loginUserId } from '../pages/Login';
+import { useLocation } from 'react-router-dom'
 
 
 const VoteButton = ({ beef, count, flag }) => {
  const [updatedCount, setUpdatedCount] = useState(count);
+ const location = useLocation()
 
   const handleVoteClick = async () => {
-   console.log(loginUserId)
    if (flag === 1) {
      try {
        // Send PATCH request to update the vote count on the backend for a specific beef
@@ -17,25 +17,23 @@ const VoteButton = ({ beef, count, flag }) => {
          },
          body: JSON.stringify({
            votesForUser1: updatedCount + 1, // Include the current vote count
-           usersThatVotedForUser1: [...beef.usersThatVotedForUser1, loginUserId] // Include the updated users array
+           usersThatVotedForUser1: [...beef.usersThatVotedForUser1, location.state.loginUserId] // Include the updated users array
          })
        })
         
        if (response.ok) {
          const responseData = await response.json()
-         if (!responseData.usersThatVotedForUser1.includes(loginUserId) && !responseData.usersThatVotedForUser2.includes(loginUserId)) {
+         if (!responseData.usersThatVotedForUser1.includes(location.state.loginUserId) && 
+          !responseData.usersThatVotedForUser2.includes(location.state.loginUserId)) {
+
           setUpdatedCount(updatedCount + 1)
-          responseData.usersThatVotedForUser1.push(loginUserId) // push not happening here
+          responseData.usersThatVotedForUser1.push(location.state.loginUserId) // push not happening here
           console.log('we can vote again')
          }
-       
          else {
            console.log('we voted for this already')
          }
-
-
        } else {
-       
        }
      } catch (error) {
        console.error('Error occurred while updating the vote count:', error);
@@ -51,7 +49,7 @@ const VoteButton = ({ beef, count, flag }) => {
          },
          body: JSON.stringify({
            votesForUser2: updatedCount + 1, // Include the current vote count
-           usersThatVotedForUser2: [...beef.usersThatVotedForUser2, loginUserId] // Include the updated users array
+           usersThatVotedForUser2: [...beef.usersThatVotedForUser2, location.state.loginUserId] // Include the updated users array
          })
        })
         
@@ -59,9 +57,11 @@ const VoteButton = ({ beef, count, flag }) => {
 
 
          const responseData = await response.json()
-         if (!responseData.usersThatVotedForUser2.includes(loginUserId)  && !responseData.usersThatVotedForUser1.includes(loginUserId)) {
+         if (!responseData.usersThatVotedForUser2.includes(location.state.loginUserId)  && 
+          !responseData.usersThatVotedForUser1.includes(location.state.loginUserId)) {
+
            setUpdatedCount(updatedCount + 1)
-           responseData.usersThatVotedForUser2.push(loginUserId)
+           responseData.usersThatVotedForUser2.push(location.state.loginUserId)
            console.log('we can vote again')
          }
        

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import socket from '../WebSocket';
 
 
 const Navbar = () => {
@@ -10,21 +11,20 @@ const Navbar = () => {
 
     useEffect(() => {
         const { state } = location;
-
-
         if (state && state.loginUserId && state.loginUserId.length !== 0) {
             setIsLoggedIn(true);
+            socket.connect()
         } else {
             setIsLoggedIn(false);
+            socket.disconnect()
         }
     }, [location]);
 
 
     const handleLogout = () => {
-        // Perform logout logic here
-        // Clear the loginUserId state and navigate to the login page
         setIsLoggedIn(false);
-        navigate('/login', { state: {} });
+        socket.disconnect()
+        navigate('/', { state: {} });
     };
 
 
@@ -34,9 +34,8 @@ const Navbar = () => {
 
 
     const handleHomeClick = () => {
-        navigate('/', { state: location.state });
+        navigate('/home', { state: location.state });
     };
-
 
     return (
         <header>
@@ -47,7 +46,7 @@ const Navbar = () => {
                     <button onClick={handleLogout}>Logout</button>
                 </div>
             ) : (
-                <button onClick={() => navigate('/login')}>Login</button>
+                <button onClick={() => navigate('/')}>Login</button>
             )}
         </header>
     );

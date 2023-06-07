@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 
 let loginUserId = '';
@@ -19,11 +20,10 @@ const Login = () => {
       const response = await fetch("/api/user/");
       const users = await response.json();
 
-
       let userFound = false;
       if (response.ok) {
         for (const user of users) {
-          if (user.usrname === email) {
+          if (user.usrname === email && user.pswd === password) {
             userFound = true;
             loginUserId = user._id;
             break;
@@ -34,18 +34,10 @@ const Login = () => {
 
       if (userFound) {
         console.log("User found");
+        toast.success("Login Successful")
         navigate("/profile", { state: { loginUserId } });
       } else {
         console.log("User not found in the database");
-      }
-
-
-      if (!response.ok) {
-        // more checks to see if it was a transmission error or if the
-        // user does not exist
-        console.log("Could not find user in the database");
-      } else {
-        // Other actions after successful authorization
       }
     };
 
@@ -85,6 +77,4 @@ const Login = () => {
   );
 };
 
-
-export { loginUserId };
 export default Login;

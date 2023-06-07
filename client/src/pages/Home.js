@@ -5,20 +5,15 @@ import { useLocation } from 'react-router-dom';
 import BeefDetails from '../components/BeefDetails';
 
 
-const ProfilePage = () => {
+const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [beefs, setBeefs] = useState(null)
   const location = useLocation();
-
-
-
 
   useEffect(() => {
     const fetchBeefs = async () => {
       const response = await fetch("/api/beef")
       const data = await response.json()
-
-
       if (response.ok) {
         setBeefs(data)
       }
@@ -47,4 +42,4 @@ const ProfilePage = () => {
   )
 }
 
-export default ProfilePage;
+export default Home;

@@ -19,6 +19,7 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "concurrently": "^8.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.1.3",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
@@ -30,8 +31,8 @@
     "puppeteer": "^20.5.0",
     "react-router-dom": "^6.11.2",
     "react-scripts": "^5.0.1",
-    "stream-chat": "^8.8.0",
-    "stream-chat-react": "^10.8.1"
+    "react-toastify": "^9.1.3",
+    "socket.io": "^4.6.2"
   },
   "repository": "https://github.com/markshinyounglee/CS35LSP2023.git"
 }
