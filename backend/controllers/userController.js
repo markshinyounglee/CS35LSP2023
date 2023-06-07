@@ -105,20 +105,50 @@ const addUserBlock = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'No such user'})
   }
+  const already_blocked = await User.findById(id)
+  if (already_blocked.blocklist.includes(req.body.blocklist)) {
+    return res.status(400).json({error : 'Already blocked that user'})
+  }
+  block_id = new mongoose.Types.ObjectId(req.body.blocklist)
+  if (id== block_id) {
+    return res.status(400).json({error : "You can't block yourself!"});
+  }
 
-  const user = await User.findOneAndUpdate({_id: id}, {
-    $addToSet: { blocklist: req.body.blocklist } },
+  const user = await User.findOneAndUpdate(
+    { _id: id },
+    {
+      $push: { blocklist: req.body.blocklist },
+    },
+    { new: true }
+  );
+  console.log(user)
+  const user_pull = await User.findOneAndUpdate(
+    {_id: id}, 
+    {$pull: {
+      friendlist: req.body.blocklist,
+      s_requests: req.body.blocklist,
+      r_requests: req.body.blocklist,
+    } },
     {new: true}
   );
-  if (user.friendlist.includes(req.body.blocklist)) {
-    user.friendlist.pull(req.body.blocklist);
-  }
-  if (!user) {
-    return res.status(404).json({error: 'No such user'})
+  const other_user = await User.findOneAndUpdate(
+    { _id: block_id },
+    {
+      $pull: {
+        friendlist: id,
+        s_requests: id,
+        r_requests: id,
+      },
+    },
+    { new: true }
+  );
+  
+  if (!user || !other_user) {
+    return res.status(404).json({ error: 'Failed to make block' });
   }
 
-  eventEmitter.emit('userUpdated', { userId: dummy.id.toString() })
-  res.status(200).json(user)
+  eventEmitter.emit('userUpdated', { userId: user_pull.id.toString() })
+  res.status(200).json(user_pull)
 }
 
 //NOTE : FOR SOME REASON THIS ONLY WORKS IF YOU USE IT TWICE
