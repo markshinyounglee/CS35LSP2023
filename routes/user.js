@@ -10,7 +10,8 @@ const {
     deleteUser, 
     patchUserBeefArray,
     makeUserRequest,
-    unsendUserRequest
+    unsendUserRequest,
+    acceptUserRequest
 } = require('../backend/controllers/userController')
 
 const router2 = express.Router()
@@ -47,5 +48,7 @@ router2.patch('/:id/patchUser', patchUserBeefArray)
 router2.patch('/:id/makeUserRequest', makeUserRequest)
 
 router2.patch('/:id/unsendUserRequest', unsendUserRequest)
+
+router2.patch('/:id/acceptUserRequest', acceptUserRequest)
 
 module.exports = router2
