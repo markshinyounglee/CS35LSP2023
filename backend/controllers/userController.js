@@ -151,6 +151,26 @@ const addUserBlock = async (req, res) => {
   res.status(200).json(user_pull)
 }
 
+const removeUserBlock = async (req, res) => {
+  const {id} = req.params
+  const block_check = await User.findById(id)
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({error: 'No such user'})
+  }
+  if (!block_check.blocklist.includes(req.body.blocklist) ) {
+    return res.status(400).json({error : 'Cannot unblock that user, they were never blocked in the first place'})
+  }
+  const user = await User.findOneAndUpdate({_id: id}, {
+    $pull: {blocklist : req.body.blocklist} },
+    {new : true}
+  );
+  if (!user) {
+    return res.status(400).json({error: 'Failed to unblock'})
+  }
+  eventEmitter.emit('userUpdated', { userId: user.id.toString() })
+  res.status(200).json(user)
+}
+
 //NOTE : FOR SOME REASON THIS ONLY WORKS IF YOU USE IT TWICE
 //TODO : DELETE THIS USER FROM ALL OTHER USERS' FRIENDLISTS AND BLOCKLISTS
 const deleteUser = async(req, res) => {
@@ -312,6 +332,7 @@ module.exports = {
     changeUserPswd,
     addUserFriend,
     addUserBlock,
+    removeUserBlock,
     getUserByName,
     deleteUser,
     patchUserBeefArray,

@@ -6,6 +6,7 @@ const {
     changeUserPswd,
     addUserFriend,
     addUserBlock,
+    removeUserBlock,
     getUserByName,
     deleteUser, 
     patchUserBeefArray,
@@ -42,6 +43,9 @@ router2.patch('/:id/changeUserPswd', changeUserPswd)
 router2.patch('/:id/addUserFriend', addUserFriend)
 
 router2.patch('/:id/addUserBlock', addUserBlock)
+
+router2.patch('/:id/removeUserBlock', removeUserBlock)
+
 
 router2.patch('/:id/patchUser', patchUserBeefArray)
 
