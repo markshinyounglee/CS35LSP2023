@@ -3,9 +3,12 @@ import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+
 import BeefDetails from '../components/BeefDetails';
 
+
 import socket from '../WebSocket';
+
 
   const ProfilePage = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,12 +21,14 @@ import socket from '../WebSocket';
     const [otheruser, setOtherUser] = useState('');
     const location = useLocation();
     const navigate = useNavigate();
+    const [aiBeefOutput, setAIBeefOutput] = useState('');
     const [friendUsernameInput, setFriendUsernameInput] = useState('');
  
     useEffect(() => {
       socket.on('connect', () => {
         console.log('Connected to the server');
       });
+
 
       socket.on('userUpdated', ( {userId} ) => {
         //const response = await fetch()
@@ -34,13 +39,16 @@ import socket from '../WebSocket';
         // Handle event here
       })
 
+
       socket.on('beefCreated', ( {beef} ) => {
         toast.success(`Beef created between ${beef.user1} and ${beef.user2}`)
       })
 
+
       socket.on('disconnect', () => {
         console.log('Disconnected from the server');
       });
+
 
       const fetchUserBeefs = async () => {
         try {
@@ -62,6 +70,7 @@ import socket from '../WebSocket';
             const friendData = await Promise.all(friendPromises);
             const friendUsernames = friendData.map((friend) => friend.usrname);
             setFriendUsernames(friendUsernames);
+
 
             // Fetch blocked usernames
               const blockedPromises = data.blocklist.map((blockedUserId) =>
@@ -85,20 +94,30 @@ import socket from '../WebSocket';
         setIsLoggedIn(false);
       }
 
+
       return () => {
         socket.off('connect');
         socket.off('userUpdated');
         socket.off('disconnect');
       }
 
+
     }, [location]);
+
+
+    const generateAIBeef =() =>{
+      //Mark put code here
+    }
+
 
 
     const sendFriendRequest = async (friendUsernameInput) => {
         friendUsernameInput.preventDefault();
 
-        
+
+       
     }
+
 
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -111,7 +130,7 @@ import socket from '../WebSocket';
           votesForUser2: 0,
           user1: userInfo.usrname,
           user2: otheruser,
-          usersThatVotedForUser1: [], 
+          usersThatVotedForUser1: [],
           usersThatVotedForUser2: []
         };
  
@@ -126,11 +145,11 @@ import socket from '../WebSocket';
         if (createBeefResponse.ok) {
           const createdBeef = await createBeefResponse.json();
           const users = await fetch('/api/user');
-          const usersData = await users.json(); 
-          for (const user of usersData) { 
+          const usersData = await users.json();
+          for (const user of usersData) {
             if (user.usrname === otheruser || user._id === location.state.loginUserId) {
               const updatedUser = {
-                mybeefs: createdBeef._id, 
+                mybeefs: createdBeef._id,
               };
               await fetch(`/api/user/${user._id}/patchUser`, {
                 method: "PATCH",
@@ -151,7 +170,6 @@ import socket from '../WebSocket';
       }
       navigate('/profile', { state: location.state });
     }
-
 
     return (
       <div className="home">
@@ -223,6 +241,10 @@ import socket from '../WebSocket';
                     name="user2"
                   />
                   <button type="submit">Create Beef</button>
+                  <div>
+                    <button onClick={generateAIBeef}>AI Generated Beef</button> {/* AI Generated Beef Button */}
+                    <div>{aiBeefOutput}</div> {/* Display AI Beef Output */}
+                  </div>
                 </form>
               </div>
             ) : (
@@ -234,6 +256,7 @@ import socket from '../WebSocket';
         )}
       </div>
     );
-    
+ 
+   
   }
 export default ProfilePage;
