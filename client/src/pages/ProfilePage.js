@@ -138,7 +138,39 @@ import socket from '../WebSocket';
 
 
     const generateAIBeef = async () => {
-      aiBeefOutput = await getMessage()
+      const aiBeefOutput = await getMessage()
+     
+      const newBeef = {
+        title: "ChatGPT-generated Roast",
+        description: aiBeefOutput,
+        votesForUser1: 0,
+        votesForUser2: 0,
+        user1: userInfo.usrname,
+        user2: "user2",
+        usersThatVotedForUser1: [],
+        usersThatVotedForUser2: []
+      };
+
+      const createBeefResponse = await fetch("/api/beef", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newBeef),
+      });
+
+      /*
+      // update the beef array and make a patch reqeust in profile
+      const beef_id =;
+      await fetch(`/api/user/${userInfo._id}/patchUser`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(),
+      });
+      */
+
     }
 
 
