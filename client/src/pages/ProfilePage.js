@@ -22,45 +22,65 @@ import socket from '../WebSocket';
     const navigate = useNavigate();
     const [aiBeefOutput, setAIBeefOutput] = useState('');
     const [friendUsernameInput, setFriendUsernameInput] = useState('');
+    const [username, setUsername] = useState('');
+
+    const handleUsernameChange = (event) => {
+      setUsername(event.target.value);
+    };
  
-    const handleAccept = async (currentUserId) => {
-      try {
-        const patchInfo = {
-          r_requests: currentUserId,
-        };
-        await fetch(`/api/user/${location.state.loginUserId}/acceptUserRequest`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(patchInfo),
-        });
-        console.log('success')
-      }
-      catch (error) {
-        console.log(error)
-      }
-      console.log('Accept button clicked');
+    const handleAccept = async (sendingUsername) => {
+      const sendingUser = await fetch(`/api/user/${sendingUsername}/getUserByName`)
+      const sendingUserData = await sendingUser.json()
+
+      console.log(sendingUserData)
+      
+      const patchInfo = {
+        r_requests: sendingUserData._id
+      };
+      await fetch(`/api/user/${location.state.loginUserId}/acceptUserRequest`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(patchInfo),
+      });
+
+      navigate("/profile", { state: location.state })
     };
   
-    const handleReject = () => {
+    const handleReject = async ( {recievingUserId, sendingUsername} ) => {
+      /*
+      const sendingUser = await fetch(`/api/user/${sendingUsername}/getUserByName`)
+      const sendingUserData = await sendingUser.json()
+
+      const patchInfo = {
+        s_requests: recievingUserId
+      }
+
+      await fetch(`/api/user/${sendingUser._id}/unsendUserRequest`, {
+        method: "PATCH", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(patchInfo)
+      })
       
       console.log('Reject button clicked');
+      */
     };
-
 
     useEffect(() => {
       socket.on('connect', () => {
         console.log('Connected to the server');
       });
-      socket.on('friendRequest', ({friendUserId, currentUserId}) => {
+      socket.on('friendRequest', ({recievingUserId, sendingUsername}) => {
         console.log('Friend request recieved');
-        if (location.state.loginUserId === friendUserId) {
+        if (location.state.loginUserId === recievingUserId) {
           toast.info(
             <div>
-              Friend request recieved from {currentUserId}
-              <button onClick={() => handleAccept(currentUserId)}>Accept</button>
-              <button onClick={handleReject}>Reject</button>
+              Friend request recieved from {sendingUsername}
+              <button onClick={() => handleAccept(sendingUsername)}>Accept</button>
+              <button onClick={handleReject(recievingUserId, sendingUsername)}>Reject</button>
             </div>,
             {
               position: toast.POSITION.BOTTOM_RIGHT,
@@ -70,10 +90,9 @@ import socket from '../WebSocket';
               // other custom options...
             }
           );
-          toast.success('Friend request recieved from' + ' ' + currentUserId);
+          toast.success('Friend request recieved from' + ' ' + sendingUsername);
         }
       })
-
 
       socket.on('userUpdated', ( {userId} ) => {
         //const response = await fetch()
@@ -86,7 +105,9 @@ import socket from '../WebSocket';
 
 
       socket.on('beefCreated', ( {beef} ) => {
-        toast.success(`Beef created between ${beef.user1} and ${beef.user2}`)
+        if (beef.user1 === location.state.loginUsername || beef.user2 === location.state.loginUsername) {
+          toast.success(`Beef created between ${beef.user1} and ${beef.user2}`)
+        }
       })
 
 
@@ -152,20 +173,21 @@ import socket from '../WebSocket';
     }, [location]);
 
 
-    const generateAIBeef = async () => {
-      const aiBeefOutput = await getMessage()
-     
+    const generateAIBeef = async (event) => {
+      event.preventDefault();
+      const aiBeefOutput = await getMessage();
+    
       const newBeef = {
-        title: "ChatGPT-generated Roast",
+        title: "ChatGPT-generated Beef",
         description: aiBeefOutput,
         votesForUser1: 0,
         votesForUser2: 0,
-        user1: userInfo.usrname,
+        user1: location.state.loginUsername,
         user2: "user2",
         usersThatVotedForUser1: [],
-        usersThatVotedForUser2: []
+        usersThatVotedForUser2: [],
       };
-
+    
       // update the general page to include the new ChatGPT-generated beef
       const createBeefResponse = await fetch("/api/beef", {
         method: "POST",
@@ -174,29 +196,58 @@ import socket from '../WebSocket';
         },
         body: JSON.stringify(newBeef),
       });
+    
+      if (createBeefResponse.ok) {
+        const createdBeef = await createBeefResponse.json();
+        const users = await fetch('/api/user');
+        const usersData = await users.json();
+        for (const user of usersData) {
+          if (user.usrname === username || user._id === location.state.loginUserId) {
+            const updatedUser = {
+              mybeefs: createdBeef._id,
+            };
+            await fetch(`/api/user/${user._id}/patchUser`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedUser),
+            });
+          }
+        }
+      } else {
+        console.log("Failed to create beef");
+      }
+    
+      navigate('/profile', { state: location.state });
+    };
+    
 
-      // update the profile page to include the new beef 
-
-      /*
-      // update the beef array and make a patch reqeust in profile
-      const beef_id =;
-      await fetch(`/api/user/${userInfo._id}/patchUser`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(),
-      });
-      */
-
-    }
 
 
-
-    const sendFriendRequest = async (friendUsernameInput) => {
-        friendUsernameInput.preventDefault();
+    const sendFriendRequest = async (e) => {
+        e.preventDefault();
+        console.log(friendUsernameInput)
+        toast.success(`Friend request sent to ${friendUsernameInput}`)
         
+        const friend = await fetch(`/api/user/${friendUsernameInput}/getUserByName`)
+        const friendData = await friend.json()
 
+        const json = {
+          s_requests: friendData._id
+        }
+
+        const makeUserRequest = await fetch(`/api/user/${location.state.loginUserId}/makeUserRequest`, {
+          method: "PATCH", 
+          headers: {
+            "Content-Type": "application/json", 
+          }, 
+          body: JSON.stringify(json)
+        })
+
+        if (makeUserRequest.ok) {
+          navigate("/profile", { state: location.state })
+        }
        
     }
 
@@ -254,80 +305,93 @@ import socket from '../WebSocket';
     }
 
     return (
-      <div className="home">
+      <div className="profile-page">
         {isLoggedIn ? (
-          <div>
+          <div className='profile-components'>
             {userInfo ? (
-              <div className='user-info'>
+              <div className='profile-info'>
+                <div className='user-info'>
                 <h1>Welcome, {userInfo.usrname}!</h1>
-                <h2>Friend List:</h2>
-                <ul>
-                  {friendUsernames.map((friendUsername) => (
-                    <li key={friendUsername}>{friendUsername}</li>
-                  ))}
-                </ul>
-                <h2>Block List:</h2>
-                <ul>
-                  {blockedUsernames.map((blockedUsername) => (
-                    <li key={blockedUsername}>{blockedUsername}</li>
-                  ))}
-                </ul>
-                <h2>My Beefs:</h2>
-                <div>
-                  <input
-                    value={friendUsernameInput}
-                    onChange={(e) => setFriendUsernameInput(e.target.value)}
-                    type="text"
-                    placeholder="Enter username"
-                    id="friend-username"
-                    name="friend-username"
-                  />
-                  <button onClick={sendFriendRequest}>Add Friend</button> {/* Friend Request Button */}
+                  <h2>Friend List:</h2>
+                  <ul>
+                    {friendUsernames.map((friendUsername) => (
+                      <li key={friendUsername}>{friendUsername}</li>
+                    ))}
+                  </ul>
                 </div>
+                <div className='beef-form'>
+                <h1>Start A Beef Here</h1>
+                  <form className="beef-form" onSubmit={handleSubmit}>
+                    <label htmlFor="title">Title</label>
+                    <input
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      type="text"
+                      placeholder="Enter the beef title"
+                      id="title"
+                      name="title"
+                    />
+                    <label htmlFor="description">Description</label>
+                    <input
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      type="text"
+                      placeholder="Enter the description"
+                      id="description"
+                      name="description"
+                    />
+                    <label htmlFor="description">Who are you beefing with?</label>
+                    <input
+                      value={otheruser}
+                      onChange={(e) => setOtherUser(e.target.value)}
+                      type="text"
+                      placeholder="Enter the username"
+                      id="user2"
+                      name="user2"
+                    />
+                    <button type="submit">Create Beef</button>
+                  </form>
               </div>
+              <div className={"ai-beef-form"}>
+              <h1>AI Generated Beef</h1>
+                <form className={"ai-beef-form"} onSubmit={generateAIBeef}>
+                  <label htmlFor="user2">Who do you want ChatGPT to beef with?</label>
+                  <input
+                    type="text"
+                    placeholder='Enter the username'
+                    id="user2"
+                    name="user2"
+                    value={username}
+                    onChange={handleUsernameChange}
+                  />
+                  <button type="submit">Generate Beef</button> {/* AI Generated Beef Button */}
+                </form>
+              </div>
+              <div className="send-friend-request-form">
+              <h2>Find A Friend</h2>
+              <form onSubmit={sendFriendRequest}>
+                <label htmlFor="friendUsername"></label>
+                <input
+                  type="text"
+                  placeholder="Enter the username"
+                  id="friendUsername"
+                  name="friendUsername"
+                  value={friendUsernameInput}
+                  onChange={(e) => setFriendUsernameInput(e.target.value)}
+                />
+                <button type="submit">Send Request</button>
+              </form>
+            </div>
+            </div>
             ) : (
               <h1>Loading user information...</h1>
             )}
             {beefs ? (
               <div className="beefs">
+                <h1>My Beefs</h1>
                 {beefs.map((beef) => (
                   <BeefDetails key={beef._id} beef={beef} />
                 ))}
-                <form className="beef-form" onSubmit={handleSubmit}>
-                  <h1>Start A Beef Here</h1>
-                  <label htmlFor="title">Title</label>
-                  <input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    type="text"
-                    placeholder="Enter the beef title"
-                    id="title"
-                    name="title"
-                  />
-                  <label htmlFor="description">Description</label>
-                  <input
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    type="text"
-                    placeholder="Enter the beef description"
-                    id="description"
-                    name="description"
-                  />
-                  <label htmlFor="description">Who are you beefing with?</label>
-                  <input
-                    value={otheruser}
-                    onChange={(e) => setOtherUser(e.target.value)}
-                    type="text"
-                    placeholder="Enter the username"
-                    id="user2"
-                    name="user2"
-                  />
-                  <button type="submit">Create Beef</button>
-                  <div>
-                    <button onClick={generateAIBeef}>AI Generated Beef</button> {/* AI Generated Beef Button */}
-                    <div>{aiBeefOutput}</div> {/* Display AI Beef Output */}
-                  </div>
-                </form>
               </div>
             ) : (
               <h1>Loading beefs...</h1>

@@ -12,7 +12,7 @@ const BeefDetails = ({ beef }) => {
         <VoteButton beef={beef} user={user1} count={votesForUser1} flag={1} />
         <VoteButton beef={beef} user={user2} count={votesForUser2} flag={2} />
       </div>
-      <p>Beef started on {createdAt}</p>
+      <p>Beef started on {new Date(createdAt).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' })}</p>
     </div>
   )
 }

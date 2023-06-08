@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 let loginUserId = ''
+let loginUsername = ''
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -51,7 +52,8 @@ const Signup = () => {
           if (createUserResponse.ok) {
             const createdUser = await createUserResponse.json()
             loginUserId = createdUser._id
-            navigate("/profile", { state: { loginUserId } });
+            loginUsername = createdUser.usrname
+            navigate("/profile", { state: { loginUserId, loginUsername } });
           } else {
             console.log("Failed to create user");
           }

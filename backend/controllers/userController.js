@@ -251,7 +251,7 @@ const makeUserRequest = async (req, res) => {
   res.status(200).json(request)
   //emit friend request event, should send id of user sending the
   //request 
-  eventEmitter.emit('friendRequest', {friendUserId: other_user._id, currentUserId: request.usrname })
+  eventEmitter.emit('friendRequest', {recievingUserId: other_user._id, sendingUsername: request.usrname })
 }
 
 const unsendUserRequest = async (req, res) => {
@@ -293,12 +293,12 @@ const acceptUserRequest = async (req, res) => {
   const {id} = req.params
   const user = await User.findById(id)
   
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({error: 'No such user'})
-  }
-  if (!mongoose.Types.ObjectId.isValid(new mongoose.Types.ObjectId(req.body.r_requests))) {
-    return res.status(404).json({error : 'Request not found'})
-  }
+  //if (!mongoose.Types.ObjectId.isValid(id)) {
+    //return res.status(404).json({error: 'No such user'})
+  //}
+  //if (!mongoose.Types.ObjectId.isValid(new mongoose.Types.ObjectId(req.body.r_requests))) {
+    //return res.status(404).json({error : 'Request not found'})
+  //}
   const other_user_exists = await User.findById(req.body.r_requests);
   if (!other_user_exists) {
     return res.status(404).json({error: 'The user you are trying to accept a request from does not exist'});

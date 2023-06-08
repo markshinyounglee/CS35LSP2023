@@ -1,6 +1,5 @@
 const http = require('node:http');
 const express = require('express');
-const cors = require('cors');
 const socketIO = require('socket.io');
 const { eventEmitter } = require('./backend/controllers/userController');
 const beefRoutes = require('./routes/beef');
@@ -12,7 +11,6 @@ const app = express();
 const port = 4000;
 
 //middleware 
-app.use(cors())
 app.use(express.json())
 
 app.use((req,res, next ) => {
@@ -40,9 +38,9 @@ mongoose.connect(process.env.MONG_URI)
     });
 
     //listen for friend request events
-    eventEmitter.on('friendRequest', ({friendUserId, currentUserId}) => {
-      io.emit('friendRequest', {friendUserId, currentUserId}); //Emit to all connected sockets
-      console.log(`friend request to ${friendUserId} sent from ${currentUserId}`)
+    eventEmitter.on('friendRequest', ({recievingUserId, sendingUsername}) => {
+      io.emit('friendRequest', {recievingUserId, sendingUsername}); //Emit to all connected sockets
+      console.log(`friend request to ${recievingUserId} sent from ${sendingUsername}`)
     });
 
     eventEmitter.on('userUpdated', ({ userId }) => {

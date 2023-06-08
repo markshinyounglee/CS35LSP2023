@@ -12,23 +12,40 @@
 
 /* Global Styling */
 body {
-  background-image: url('./images/raw.jpg');
+  /*background-image: url('./images/raw.jpg');*/
   background-color: #003366;
   font-family: Jura, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+header h1 {
+  color: white;
+}
+
 .container {
   display: flex; 
   flex-direction: row;
+  padding: 20px;
 }
 
-.container a{
-  padding: 10px; 
-  text-align: left;
-  color: white; 
-  font-size: 10px
+.container > * {
+  margin: 5px;
+}
+
+.container button{
+  font-family: Jura, sans-serif;
+  font-variant-numeric: oldstyle-nums;
+  background-color: #984abd;
+  cursor: pointer; 
+  border-radius: 10px;
+  border-color: #f09de9; 
+  -moz-border-radius: 10px; 
+  -webkit-border-radius: 10px;
+  color: #6fc7c7;
+  height: 32px;
+  width: 140px; 
+  font-size: 17px;
 }
 
 .pages {
@@ -42,8 +59,8 @@ body {
   text-align: left; 
 }
 
-.beefs {
-  width: 65%; 
+.home .beefs {
+  width: 75%; 
 }
 
 .beef-details {
@@ -149,4 +166,168 @@ input {
   height: 32px;
   width: 70px; 
   font-size: 15px;
+}
+
+.profile-page {
+  justify-content: center; 
+}
+
+.profile-info {
+  display: grid; 
+  grid-template-rows: auto 1fr;
+}
+
+.user-info {
+  grid-row: 1 / span 1;
+  grid-column: 1 / span 2;
+  background-color: #95b6b8;
+  border: 4px solid #bde4e9; 
+  border-radius: 15px; 
+  background-color: #95b6b8;
+  text-align: left; 
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin: 0 auto 0 auto;  
+  margin-top: 30px;
+  width: 65%;
+  padding: 20px; 
+}
+
+.user-info h1 {
+  text-align: center;
+  font-size: 40px;
+  color: #6e5faf; 
+}
+
+.beef-form {
+  grid-row: 2; 
+  background-color: #95b6b8;
+  border: 4px solid #bde4e9; 
+  border-radius: 15px; 
+  background-color: #95b6b8;
+  text-align: center; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  margin: 0 auto 0 auto; 
+  margin-top: 30px; 
+  width: 65%;
+  padding: 20px; 
+}
+
+.beef-form h1 {
+  text-align: center;
+  font-size: 40px;
+  color: #6e5faf; 
+}
+
+.beef-form form {
+  justify-content: top;
+  border: none;
+}
+
+.beef-form button {
+  font-family: Jura, sans-serif;
+  background-color: #984abd;
+  cursor: pointer; 
+  border-radius: 10px;
+  border-color: #f09de9; 
+  -moz-border-radius: 10px; 
+  -webkit-border-radius: 10px;
+  color: #6fc7c7;
+  height: 32px;
+  width:140px; 
+  font-size: 15px;
+}
+
+.ai-beef-form {
+  grid-row: 2;  
+  background-color: #95b6b8;
+  border: 4px solid #bde4e9; 
+  border-radius: 15px; 
+  background-color: #95b6b8;
+  text-align: center; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  margin: 0 auto 0 auto; 
+  margin-top: 30px; 
+  width: 65%;
+  padding: 20px; 
+}
+
+.ai-beef-form form {
+  justify-content: top;
+  border: none;
+}
+
+.ai-beef-form h1 {
+  text-align: center;
+  font-size: 40px;
+  color: #6e5faf; 
+}
+
+.ai-beef-form button {
+  font-family: Jura, sans-serif;
+  background-color: #984abd;
+  cursor: pointer; 
+  border-radius: 10px;
+  border-color: #f09de9; 
+  -moz-border-radius: 10px; 
+  -webkit-border-radius: 10px;
+  color: #6fc7c7;
+  height: 32px;
+  width: 140px; 
+  font-size: 15px;
+}
+
+.send-friend-request-form {
+  background-color: #95b6b8;
+  border: 4px solid #bde4e9; 
+  border-radius: 15px; 
+  background-color: #95b6b8;
+  text-align: center; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+  margin: 0 auto 0 auto; 
+  margin-top: 30px; 
+  width: 65%;
+  padding: 20px; 
+}
+
+.send-friend-request-form button {
+  font-family: Jura, sans-serif;
+  background-color: #984abd;
+  cursor: pointer; 
+  border-radius: 10px;
+  border-color: #f09de9; 
+  -moz-border-radius: 10px; 
+  -webkit-border-radius: 10px;
+  color: #6fc7c7;
+  height: 32px;
+  width: 140px; 
+  font-size: 15px;
+}
+
+.profile-components {
+  justify-content: center; 
+  display: flex; 
+  flex-direction: column;
+  text-align: left; 
+}
+
+.profile-components .beefs {
+  padding-left: 20%;
+  padding-right: 20%; 
+}
+
+.beefs > h1 {
+  text-align: center;
+  font-size: 40px;
+  color: white; 
 }

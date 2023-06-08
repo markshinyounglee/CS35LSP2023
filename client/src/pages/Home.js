@@ -34,10 +34,12 @@ const Home = () => {
 
 
   return (
-    <div className='beefs'>
-      {beefs && beefs.map((beef) => (
-        <BeefDetails key={beef._id} beef={beef}/>
-      ))}
+    <div className='home'>
+      <div className='beefs'>
+        {beefs && beefs.map((beef) => (
+          <BeefDetails key={beef._id} beef={beef}/>
+        ))}
+      </div>
     </div>
   )
 }

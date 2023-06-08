@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 
 let loginUserId = '';
+let loginUsername = ''
 
 
 const Login = () => {
@@ -15,7 +16,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
     const authorize = async () => {
       const response = await fetch("/api/user/");
       const users = await response.json();
@@ -26,21 +26,20 @@ const Login = () => {
           if (user.usrname === email && user.pswd === password) {
             userFound = true;
             loginUserId = user._id;
+            loginUsername = user.usrname
             break;
           }
         }
       }
 
-
       if (userFound) {
         console.log("User found");
         toast.success("Login Successful")
-        navigate("/profile", { state: { loginUserId } });
+        navigate("/profile", { state: { loginUserId, loginUsername } });
       } else {
         console.log("User not found in the database");
       }
     };
-
 
     await authorize();
   };
