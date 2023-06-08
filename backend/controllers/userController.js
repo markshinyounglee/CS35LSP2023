@@ -36,7 +36,7 @@ const createUser = async (req, res) => {
   const { usrname, pswd, friendlist, blocklist, mybeefs, s_requests, r_requests } = req.body;
   //add doc to database
   const existing_user = await User.findOne({"usrname" : req.body.usrname})
-  if (existing_user > 0) {
+  if (existing_user) {
     return res.status(400).json({error: "This username is taken."});
   }
   try {
@@ -292,7 +292,10 @@ const acceptUserRequest = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'No such user'})
   }
-  const other_user_exists = await User.findById(new mongoose.Types.ObjectId(req.body.r_requests));
+  if (!mongoose.Types.ObjectId.isValid(new mongoose.Types.ObjectId(req.body.r_requests))) {
+    return res.status(404).json({error : 'Request not found'})
+  }
+  const other_user_exists = await User.findById(req.body.r_requests);
   if (!other_user_exists) {
     return res.status(404).json({error: 'The user you are trying to accept a request from does not exist'});
   }
@@ -303,7 +306,7 @@ const acceptUserRequest = async (req, res) => {
     return res.status(400).json({error : 'That user did not request you.'})
   }
   const request = await User.findOneAndUpdate({_id: id}, {
-    $pull : {r_requests : req.body.r_requests},
+    $pull : {r_requests : req.body.r_requests, s_requests : req.body.r_requests},
     $push : {friendlist : req.body.r_requests}},
     {new : true}
   );
@@ -311,7 +314,7 @@ const acceptUserRequest = async (req, res) => {
     return res.status(400).json({error : 'Could not make this request'})
   }
   const other_user = await User.findOneAndUpdate( {_id: req.body.r_requests}, {
-    $pull : {s_requests: id},
+    $pull : {s_requests: id, r_requests : id},
     $push : {friendlist : id}},
     {new : true}
   );
