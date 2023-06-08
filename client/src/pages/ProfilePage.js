@@ -25,8 +25,23 @@ import socket from '../WebSocket';
     const [aiBeefOutput, setAIBeefOutput] = useState('');
     const [friendUsernameInput, setFriendUsernameInput] = useState('');
  
-    const handleAccept = () => {
-      
+    const handleAccept = async (currentUserId) => {
+      try {
+        const patchInfo = {
+          r_requests: currentUserId,
+        };
+        await fetch(`/api/user/${location.state.loginUserId}/acceptUserRequest`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(patchInfo),
+        });
+        console.log('success')
+      }
+      catch (error) {
+        console.log(error)
+      }
       console.log('Accept button clicked');
     };
   
@@ -46,7 +61,7 @@ import socket from '../WebSocket';
           toast.info(
             <div>
               Friend request recieved from {currentUserId}
-              <button onClick={handleAccept}>Accept</button>
+              <button onClick={() => handleAccept(currentUserId)}>Accept</button>
               <button onClick={handleReject}>Reject</button>
             </div>,
             {
