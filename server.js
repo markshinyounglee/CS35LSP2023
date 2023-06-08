@@ -39,6 +39,12 @@ mongoose.connect(process.env.MONG_URI)
       });
     });
 
+    //listen for friend request events
+    eventEmitter.on('friendRequest', ({friendUserId, currentUserId}) => {
+      io.emit('friendRequest', {friendUserId, currentUserId}); //Emit to all connected sockets
+      console.log(`friend request to ${friendUserId} sent from ${currentUserId}`)
+    });
+
     eventEmitter.on('userUpdated', ({ userId }) => {
       io.emit('userUpdated', { userId }); // Emit to all connected sockets
       console.log(`user with ID ${userId} has updated their beef array`)

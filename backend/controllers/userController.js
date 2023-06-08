@@ -22,45 +22,41 @@ const getUser = async(req, res) =>{
 }
 // get user by name
 const getUserByName = async (req, res) => {
-  try {
-    const { usrname } = req.params;
-    const user = await User.findOne({ usrname });
-    
-    if (user) {
-      // User found
-      res.status(200).json(user);
-    } else {
-      // User not found
-      res.status(404).json({ message: 'User not found' });
-    }
-  } catch (error) {
-    // Handle the error appropriately
-    console.error('Error fetching user:', error);
-    res.status(500).json({ message: 'Internal server error' });
+  const {name} = req.params
+  console.log(name)
+  const user = await User.findOne({usrname : name})
+  if (!user) {
+    return res.status(404).json({error: 'No such user'})
   }
+  res.status(200).json(user)
+
 }
 
 const createUser = async (req, res) => {
-    const { usrname, pswd, friendlist, blocklist, mybeefs, s_requests, r_requests } = req.body;
-    //add doc to database
-    try {
-      if (mongoose.connection.readyState !== 1) {
-        throw new Error('MongoDB connection is not ready');
-      }
-    
-      const user = await User.create({
-        usrname,
-        pswd,
-        friendlist,
-        blocklist,
-        mybeefs,
-        s_requests,
-        r_requests
-      });
-      res.status(200).json(user);
-    } catch (error) {
-      res.status(400).json({ error: error.message });
-    }}
+  const { usrname, pswd, friendlist, blocklist, mybeefs, s_requests, r_requests } = req.body;
+  //add doc to database
+  const existing_user = await User.findOne({"usrname" : req.body.usrname})
+  if (existing_user) {
+    return res.status(400).json({error: "This username is taken."});
+  }
+  try {
+    if (mongoose.connection.readyState !== 1) {
+      throw new Error('MongoDB connection is not ready');
+    }
+  
+    const user = await User.create({
+      usrname,
+      pswd,
+      friendlist,
+      blocklist,
+      mybeefs,
+      s_requests,
+      r_requests
+    });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }}
 const changeUserPswd = async (req, res) => {
   const {id} = req.params
 
@@ -253,6 +249,9 @@ const makeUserRequest = async (req, res) => {
     return res.status(400).json({error : "Unable to make request at this time."})
   }
   res.status(200).json(request)
+  //emit friend request event, should send id of user sending the
+  //request 
+  eventEmitter.emit('friendRequest', {friendUserId: other_user._id, currentUserId: request.usrname })
 }
 
 const unsendUserRequest = async (req, res) => {
@@ -296,7 +295,10 @@ const acceptUserRequest = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'No such user'})
   }
-  const other_user_exists = await User.findById(new mongoose.Types.ObjectId(req.body.r_requests));
+  if (!mongoose.Types.ObjectId.isValid(new mongoose.Types.ObjectId(req.body.r_requests))) {
+    return res.status(404).json({error : 'Request not found'})
+  }
+  const other_user_exists = await User.findById(req.body.r_requests);
   if (!other_user_exists) {
     return res.status(404).json({error: 'The user you are trying to accept a request from does not exist'});
   }
@@ -307,7 +309,7 @@ const acceptUserRequest = async (req, res) => {
     return res.status(400).json({error : 'That user did not request you.'})
   }
   const request = await User.findOneAndUpdate({_id: id}, {
-    $pull : {r_requests : req.body.r_requests},
+    $pull : {r_requests : req.body.r_requests, s_requests : req.body.r_requests},
     $push : {friendlist : req.body.r_requests}},
     {new : true}
   );
@@ -315,7 +317,7 @@ const acceptUserRequest = async (req, res) => {
     return res.status(400).json({error : 'Could not make this request'})
   }
   const other_user = await User.findOneAndUpdate( {_id: req.body.r_requests}, {
-    $pull : {s_requests: id},
+    $pull : {s_requests: id, r_requests : id},
     $push : {friendlist : id}},
     {new : true}
   );

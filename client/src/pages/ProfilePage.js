@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer  } from 'react-toastify';
 import { Configuration, OpenAIApi } from "openai"
 import { getMessage } from "../chatai"
 
 import BeefDetails from '../components/BeefDetails';
+
 
 
 import socket from '../WebSocket';
@@ -24,10 +25,41 @@ import socket from '../WebSocket';
     const [aiBeefOutput, setAIBeefOutput] = useState('');
     const [friendUsernameInput, setFriendUsernameInput] = useState('');
  
+    const handleAccept = () => {
+      
+      console.log('Accept button clicked');
+    };
+  
+    const handleReject = () => {
+      
+      console.log('Reject button clicked');
+    };
+
+
     useEffect(() => {
       socket.on('connect', () => {
         console.log('Connected to the server');
       });
+      socket.on('friendRequest', ({friendUserId, currentUserId}) => {
+        console.log('Friend request recieved');
+        if (location.state.loginUserId === friendUserId) {
+          toast.info(
+            <div>
+              Friend request recieved from {currentUserId}
+              <button onClick={handleAccept}>Accept</button>
+              <button onClick={handleReject}>Reject</button>
+            </div>,
+            {
+              position: toast.POSITION.BOTTOM_RIGHT,
+              autoClose: false,
+              closeOnClick: false,
+              draggable: false,
+              // other custom options...
+            }
+          );
+          toast.success('Friend request recieved from' + ' ' + currentUserId);
+        }
+      })
 
 
       socket.on('userUpdated', ( {userId} ) => {
@@ -99,7 +131,6 @@ import socket from '../WebSocket';
         socket.off('connect');
         socket.off('userUpdated');
         socket.off('disconnect');
-        socket.off('beefCreated'); // this fixes multiple notification feature
       }
 
 
@@ -107,49 +138,40 @@ import socket from '../WebSocket';
 
 
     const generateAIBeef = async () => {
-      const aiBeefOutput = await getMessage()
-     
-      const newBeef = {
-        title: "ChatGPT-generated Roast",
-        description: aiBeefOutput,
-        votesForUser1: 0,
-        votesForUser2: 0,
-        user1: userInfo.usrname,
-        user2: "user2",
-        usersThatVotedForUser1: [],
-        usersThatVotedForUser2: []
-      };
-
-      const createBeefResponse = await fetch("/api/beef", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newBeef),
-      });
-
-      /*
-      // update the beef array and make a patch reqeust in profile
-      const beef_id =;
-      await fetch(`/api/user/${userInfo._id}/patchUser`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(),
-      });
-      */
-
+      aiBeefOutput = await getMessage()
     }
 
 
 
-    const sendFriendRequest = async (friendUsernameInput) => {
-        friendUsernameInput.preventDefault();
-        
-
-       
-    }
+    const sendFriendRequest = async () => {
+      // loop through all users and find user that matches the friendUsernameInput
+      try {
+        console.log(friendUsernameInput)
+        const users = await fetch('/api/user');
+        const usersData = await users.json();
+        for (const user of usersData) {
+          if (user.usrname === friendUsernameInput) { // Use friendUsernameInput here
+            const friendId = {
+              s_requests: user._id,
+            };
+            
+            // {"s_requests" : "[friend_id]"}
+            await fetch(`/api/user/${location.state.loginUserId}/makeUserRequest`, {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(friendId),
+            });
+            toast.success("Friend request to " + friendUsernameInput + " was sent successfully!")
+            break; // Exit the loop after finding a matching user
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    
 
 
     const handleSubmit = async (e) => {
