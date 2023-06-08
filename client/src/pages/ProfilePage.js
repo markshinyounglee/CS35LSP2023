@@ -23,10 +23,56 @@ import socket from '../WebSocket';
     const [aiBeefOutput, setAIBeefOutput] = useState('');
     const [friendUsernameInput, setFriendUsernameInput] = useState('');
  
+    const handleAccept = async (currentUserId) => {
+      try {
+        const patchInfo = {
+          r_requests: currentUserId,
+        };
+        await fetch(`/api/user/${location.state.loginUserId}/acceptUserRequest`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(patchInfo),
+        });
+        console.log('success')
+      }
+      catch (error) {
+        console.log(error)
+      }
+      console.log('Accept button clicked');
+    };
+  
+    const handleReject = () => {
+      
+      console.log('Reject button clicked');
+    };
+
+
     useEffect(() => {
       socket.on('connect', () => {
         console.log('Connected to the server');
       });
+      socket.on('friendRequest', ({friendUserId, currentUserId}) => {
+        console.log('Friend request recieved');
+        if (location.state.loginUserId === friendUserId) {
+          toast.info(
+            <div>
+              Friend request recieved from {currentUserId}
+              <button onClick={() => handleAccept(currentUserId)}>Accept</button>
+              <button onClick={handleReject}>Reject</button>
+            </div>,
+            {
+              position: toast.POSITION.BOTTOM_RIGHT,
+              autoClose: false,
+              closeOnClick: false,
+              draggable: false,
+              // other custom options...
+            }
+          );
+          toast.success('Friend request recieved from' + ' ' + currentUserId);
+        }
+      })
 
 
       socket.on('userUpdated', ( {userId} ) => {

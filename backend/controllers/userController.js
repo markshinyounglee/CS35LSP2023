@@ -289,9 +289,10 @@ const unsendUserRequest = async (req, res) => {
 }
 
 const acceptUserRequest = async (req, res) => {
+  console.log(req.params)
   const {id} = req.params
   const user = await User.findById(id)
-
+  
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(404).json({error: 'No such user'})
   }
