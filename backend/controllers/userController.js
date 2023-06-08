@@ -253,6 +253,9 @@ const makeUserRequest = async (req, res) => {
     return res.status(400).json({error : "Unable to make request at this time."})
   }
   res.status(200).json(request)
+  //emit friend request event, should send id of user sending the
+  //request 
+  eventEmitter.emit('friendRequest', {friendUserId: other_user._id, currentUserId: request.usrname })
 }
 
 const unsendUserRequest = async (req, res) => {
