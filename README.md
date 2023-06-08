@@ -1,8 +1,12 @@
 # BeefReal
 
 ## Table of Contents
-<a name="general-info"></a>
-Document
+* [Introduction](#introduction)
+* [Motivation](#motivation)
+* [Features](#features)
+* [How to install and run](#how-to-install-and-run)
+* [Code contributors](#code-contributors)
+* [License](#license)
 
 ## Introduction
 Welcome to Beefreal, a friendly-sarcastic place where we can beef our friends without being beaten.
