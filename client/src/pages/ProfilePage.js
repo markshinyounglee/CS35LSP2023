@@ -228,7 +228,6 @@ import socket from '../WebSocket';
     const sendFriendRequest = async (e) => {
         e.preventDefault();
         console.log(friendUsernameInput)
-        toast.success(`Friend request sent to ${friendUsernameInput}`)
         
         const friend = await fetch(`/api/user/${friendUsernameInput}/getUserByName`)
         const friendData = await friend.json()
@@ -246,6 +245,7 @@ import socket from '../WebSocket';
         })
 
         if (makeUserRequest.ok) {
+          toast.success(`Friend request sent to ${friendUsernameInput}`)
           navigate("/profile", { state: location.state })
         }
        
