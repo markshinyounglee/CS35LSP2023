@@ -183,7 +183,7 @@ import socket from '../WebSocket';
         votesForUser1: 0,
         votesForUser2: 0,
         user1: location.state.loginUsername,
-        user2: "user2",
+        user2: username,
         usersThatVotedForUser1: [],
         usersThatVotedForUser2: [],
       };

@@ -5,7 +5,7 @@ import { Configuration, OpenAIApi } from "openai"
 // const submitButton = document.querySelector('#submit')
 // const apiOutputElement = document.querySelector('#output');
 
-const apiKey = "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"
+const apiKey = "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"
 
 async function getMessage() {
     console.log('clicked')

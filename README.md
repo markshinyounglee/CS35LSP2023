@@ -24,9 +24,9 @@ After the user creates his/her account, the profile page displays all the beef m
 
 To give more taste for the web applicaiton, we included three advanced Features:
 1. Notifications
-* We included notification features where users can
+* We included notification features when the user logs in. Also, the user and the person whom he/she is beefing with are both notified when a beef between the two is posted. 
 
-2. Add friend/Block friend
+2. Add friend
 * BeefReal is meant to be a playground among friends, so we also have add friend/remove friend functionality. Friends will be notified when we post a beef about them and vice versa. 
 
 3. AI-generated Beef
