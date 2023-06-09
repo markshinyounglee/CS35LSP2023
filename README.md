@@ -68,7 +68,30 @@ and run
 npm install path-browserify
 ```
 
-After installing all dependencies, you first need to connect to the MongoDB server. Go into CS35LSP2023 and run 
+Then, you should change the webpack configuration setting. For details, [see here](https://stackoverflow.com/questions/70398678/i-tried-to-polyfill-modules-in-webpack-5-but-not-working-reactjs). 
+
+```bash
+cd CS35LSP2023/client/node_modules/react-scripts/config/webpack.config.js
+```
+
+After going to webpack.config.js, navigate to resolve block (around line 300) and insert the fallback code so that the result looks like this:
+
+```javascript
+resolve: {
+    fallback: {
+        "path": require.resolve("path-browserify"),
+        // "stream": require.resolve("stream-browserify")
+        "crypto": false,
+        os: false,
+    }, 
+
+    // more segment
+}
+```
+
+This will resolve polyfill problems commonly encountered when running this web application.
+
+After installing all dependencies and making all changes, you first need to connect to the MongoDB server. Go into CS35LSP2023 and run 
 
 ```bash
 npm start

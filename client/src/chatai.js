@@ -5,7 +5,7 @@ import { Configuration, OpenAIApi } from "openai"
 // const submitButton = document.querySelector('#submit')
 // const apiOutputElement = document.querySelector('#output');
 
-const apiKey = "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"
+const apiKey = "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"
 
 async function getMessage() {
     console.log('clicked')
@@ -17,7 +17,7 @@ async function getMessage() {
             },
             body: JSON.stringify({
                 model: "gpt-3.5-turbo-0301",
-                messages: [{role: "user", content: "(Limit: 45 words) Beef me very amicably but slightly sarcastically"}],
+                messages: [{role: "user", content: "(Limit: 45 words) Beef me very amicably but slightly sarcastically (never say you're AI)"}],
                 max_tokens: 100
             })
         }
