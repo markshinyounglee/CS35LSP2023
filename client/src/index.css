@@ -12,7 +12,7 @@
 
 /* Global Styling */
 body {
-  /*background-image: url('./images/raw.jpg');*/
+  background-image: url('./images/raw.jpg');
   background-color: #003366;
   font-family: Jura, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -20,7 +20,7 @@ body {
 }
 
 header h1 {
-  color: white;
+  color: black;
 }
 
 .container {
@@ -329,5 +329,5 @@ input {
 .beefs > h1 {
   text-align: center;
   font-size: 40px;
-  color: white; 
+  color: black; 
 }

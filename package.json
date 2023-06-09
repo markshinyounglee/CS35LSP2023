@@ -12,8 +12,8 @@
   "authors": {
     "author1": "Shinyoung Lee (Mark) <markshinyounglee@gmail.com>",
     "author2": "Abhinav Amanaganti <abhinava5@g.ucla.edu>",
-    "author3": "Arman Durrani",
-    "author 4": "Taejus Yee"
+    "author3": "Arman Durrani <>",
+    "author 4": "Taejus Yee <>"
   },
   "license": "ISC",
   "dependencies": {
